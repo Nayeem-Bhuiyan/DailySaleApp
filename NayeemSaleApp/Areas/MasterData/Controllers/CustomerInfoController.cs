@@ -20,8 +20,6 @@ namespace NayeemSaleApp.Areas.MasterData.Controllers
             _CustomerService = CustomerService ?? throw new ArgumentNullException(nameof(CustomerService));
         }
 
-
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> Index()
         {

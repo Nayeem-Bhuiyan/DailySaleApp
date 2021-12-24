@@ -4,5 +4,243 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+@section Style{
+
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="breadcrumb-holder">
+            <h1 class="main-title float-left">Customer Info</h1>
+            <ol class="breadcrumb float-right">
+                <li class="breadcrumb-item"><a href="/Home/Index"><i class="fa fa-home fa-2x"></i></a></li>
+                <li class="breadcrumb-item active"><a href="#">Customer</a></li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3><i class="fa fa-free-code-camp bigfonts"></i>Create New Customer</h3>
+            </div>
+
+            <div class="card-body">
+
+                <form autocomplete="off" id="frmData" asp-area="MasterData" asp-controller="CustomerInfo" asp-action="Index">
+                    <input type="hidden" name="CustomerId" id="CustomerId" value="0" />
+                    <div class="form-group row">
+                        <label for="customerName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter customer Name" required autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="contactNumber" class="col-sm-2 col-form-label">Contact</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="contactNumber" name="contactNumber" placeholder="Enter contact Number" required autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-success" id="btnSave">Save</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- end card-->
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3><i class="fa fa-table"></i>Customer Information</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblData" class="table table-bordered table-hover display">
+                        <thead class="bg-success text-white">
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.customers != null)
+                            {
+                                @foreach (var item in Model.customers)
+                                {
+                                    <tr>
+                                        <td>@item?.Id</td>
+                                        <td>@item?.customerName</td>
+                                        <td>@item?.contactNumber</td>
+                                        <td>
+                                            <a class="btn btn-warning" onclick="Edit(@item.Id,'@item.customerName','@item.contactNumber')">Edit</a>
+                                            <a class="btn btn-danger" onclick="Delete(@item.Id)">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr></tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div><!-- end card-->
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            CleanData();
+            $("#tblData").DataTable({
+                order: [[0, "desc"]]
+            });
+        })
+
+        function CleanData() {
+            $("#CustomerId").val(0);
+            $("#customerName").val("");
+            $("#contactNumber").val("");
+        }
+
+        function Edit(Id, customerName, contactNumber) {
+            CleanData();
+            $("#CustomerId").val(Id);
+            $("#customerName").val(customerName);
+            $("#contactNumber").val(contactNumber);
+        }
+
+
+        $("#customerName").keyup(function () {
+            CheckDuplicate();
+        });
+
+        function CheckDuplicate() {
+
+            var customer = $("#customerName").val().toLowerCase();
+            $('#tblData tbody tr').each(function () {
+                var customerInTable = $(this).find("td").eq(1).text().toLowerCase();
+                if ($.trim(customer) == $.trim(customerInTable)) {
+                    $(this).find("td").eq(1).addClass("bg-warning");
+                    swal.fire('warning', 'Sorry!! duplicate valu has found', 'warning');
+                    $("#customerName").val("");
+                }
+                else {
+                    $(this).find("td").eq(1).removeClass("bg-warning");
+                }
+            });
+
+        }
+
+
+        $('#btnSave').click(function () {
+
+            $('#frmData').on('submit', function (event) {
+
+                event.preventDefault();
+                CheckDuplicate();
+                var frmdata = {
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val(),
+                    CustomerId: $("#CustomerId").val(),
+                    customerName: $("#customerName").val(),
+                    contactNumber: $("#contactNumber").val(),
+                }
+
+                console.log(frmdata);
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to save this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/MasterData/CustomerInfo/Index",
+                            type: "POST",
+                            data:frmdata,
+                            beforeSend: function () {
+                                $('#btnSave').attr('disabled', 'disabled');
+                                $('#btnSave').val('Submitting...');
+
+                            },
+                        }).done(function (data) {
+
+                            $("#btnSave").removeAttr('disabled');
+                            swal.fire('success', 'Saved Successfully!', 'success').then(function () {
+                                CleanData();
+                                location.reload();
+                            });
+
+                        }).fail(function () {
+                            CleanData();
+                            $("#btnSave").removeAttr('disabled');
+                            swal.fire('warning', 'Failed!', 'warning');
+                        })
+                    }
+
+                });
+            })
+        })
+
+        function Delete(Id) {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to retrieve this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/MasterData/CustomerInfo/Delete/"+Id,
+                        data: { Id: Id },
+                        type: 'POST'
+                    })
+                        .done(function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted Successfully!!',
+                                showConfirmButton: false,
+                                timer: 1000
+                            }).then(function () {
+                                window.location.reload();
+                            })
+                        })
+                        .fail(function () {
+                            swal.fire('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                        });
+                }
+            });
+        }
+    </script>
+}
 
