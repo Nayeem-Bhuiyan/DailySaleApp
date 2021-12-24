@@ -5,10 +5,11 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NayeemSaleApp.Data.Entity.MasterDataEntity;
+using NayeemSaleApp.Services.MasterDataServiceInformation.Interfaces;
 
 namespace NayeemSaleApp.Services.MasterDataServiceInformation
 {
-    public class CustomerService
+    public class CustomerService: ICustomerService
     {
         private readonly string _connectionString;
 

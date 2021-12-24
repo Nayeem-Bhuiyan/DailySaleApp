@@ -131,9 +131,9 @@ namespace NayeemSaleApp
             //#region ProductService
             //services.AddScoped<IProductService, ProductService>();
             //#endregion
-            //#region CustomerService
-            //services.AddScoped<ICustomerService, CustomerService>();
-            //#endregion
+            #region CustomerService
+            services.AddScoped<ICustomerService, CustomerService>();
+            #endregion
 
             #region PDF
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
