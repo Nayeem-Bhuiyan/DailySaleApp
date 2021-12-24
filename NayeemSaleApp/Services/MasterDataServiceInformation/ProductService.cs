@@ -107,7 +107,6 @@ namespace NayeemSaleApp.Services.MasterDataServiceInformation
                     try
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        //cmd.Parameters.Add(new SqlParameter("@Id", model.ProductId));
                         cmd.Parameters.Add(new SqlParameter("@productName", model.productName));
                         cmd.Parameters.Add(new SqlParameter("@productCode", model.productCode));
                         await con.OpenAsync();

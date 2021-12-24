@@ -1,40 +1,41 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using NayeemSaleApp.Data.Entity.SaleRecordEntity;
-using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
+using NayeemSaleApp.Data.Entity.PaymentRecordEntity;
+using NayeemSaleApp.Services.PaymentRecordServiceInformation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NayeemSaleApp.Services.SaleRecordServiceInformation
+namespace NayeemSaleApp.Services.PaymentRecordServiceInformation
 {
-    public class SaleRecordService : ISaleRecordService
+
+    public class PaymentRecordService : IPaymentRecordService
     {
         private readonly string _connectionString;
 
-        public SaleRecordService(IConfiguration configuration)
+        public PaymentRecordService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("AppDbConnection");
         }
 
-        public async Task<IEnumerable<SaleRecord>> GetAll()
+        public async Task<IEnumerable<PaymentRecord>> GetAll()
         {
             using (SqlConnection sql = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_GetAllSaleRecord", sql))
+                using (SqlCommand cmd = new SqlCommand("Sp_GetAllPaymentRecord", sql))
                 {
                     try
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        var response = new List<SaleRecord>();
+                        var response = new List<PaymentRecord>();
                         await sql.OpenAsync();
 
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
-                                response.Add(MapToSaleRecord(reader));
+                                response.Add(MapToPaymentRecord(reader));
                             }
                         }
 
@@ -49,19 +50,20 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
             }
         }
 
-        private SaleRecord MapToSaleRecord(SqlDataReader reader)
+        private PaymentRecord MapToPaymentRecord(SqlDataReader reader)
         {
             try
             {
-                return new SaleRecord()
+                return new PaymentRecord()
                 {
                     Id = Convert.ToInt32(reader["Id"]),
-                    ProductId = Convert.ToInt32(reader["ProductId"]),
+                    grossAmount = Convert.ToInt32(reader["grossAmount"]),
+                    discountAmount = Convert.ToInt32(reader["discountAmount"]),
+                    vatAmount = Convert.ToInt32(reader["vatAmount"]),
+                    receiveTotal = Convert.ToInt32(reader["receiveTotal"]),
                     CustomerId = Convert.ToInt32(reader["CustomerId"]),
-                    rate = Convert.ToInt32(reader["rate"]),
-                    quantity = Convert.ToInt32(reader["quantity"]),
-                    billDate = Convert.ToDateTime(reader["billDate"]),
-                    boucherNumber = reader["boucherNumber"].ToString()
+                    payType = Convert.ToInt32(reader["payType"]),
+                    remarks = reader["remarks"].ToString()
                 };
             }
             catch (System.Exception)
@@ -70,25 +72,25 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
             }
         }
 
-        public async Task<SaleRecord> GetById(int? Id)
+        public async Task<PaymentRecord> GetById(int? Id)
         {
             using (SqlConnection sql = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_GetSaleRecordById", sql))
+                using (SqlCommand cmd = new SqlCommand("Sp_GetPaymentRecordById", sql))
                 {
 
                     try
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
-                        SaleRecord response = null;
+                        PaymentRecord response = null;
                         await sql.OpenAsync();
 
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
-                                response = MapToSaleRecord(reader);
+                                response = MapToPaymentRecord(reader);
                             }
                         }
                         return response;
@@ -102,21 +104,22 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
             }
         }
 
-        public async Task<bool> Insert(SaleRecord model)
+        public async Task<bool> Insert(PaymentRecord model)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_InsertSaleRecord", con))
+                using (SqlCommand cmd = new SqlCommand("Sp_InsertPaymentRecord", con))
                 {
                     try
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@ProductId", model.ProductId));
+                        cmd.Parameters.Add(new SqlParameter("@grossAmount", model.grossAmount));
+                        cmd.Parameters.Add(new SqlParameter("@discountAmount", model.discountAmount));
+                        cmd.Parameters.Add(new SqlParameter("@vatAmount", model.vatAmount));
+                        cmd.Parameters.Add(new SqlParameter("@receiveTotal", model.receiveTotal));
                         cmd.Parameters.Add(new SqlParameter("@CustomerId", model.CustomerId));
-                        cmd.Parameters.Add(new SqlParameter("@rate", model.rate));
-                        cmd.Parameters.Add(new SqlParameter("@quantity", model.quantity));
-                        cmd.Parameters.Add(new SqlParameter("@billDate", model.billDate));
-                        cmd.Parameters.Add(new SqlParameter("@boucherNumber", model.boucherNumber));
+                        cmd.Parameters.Add(new SqlParameter("@payType", model.payType));
+                        cmd.Parameters.Add(new SqlParameter("@remarks", model.remarks));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;
@@ -129,23 +132,25 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
             }
         }
 
-        public async Task<bool> Update(SaleRecord model)
+        public async Task<bool> Update(PaymentRecord model)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_UpdateSaleRecord", con))
+                using (SqlCommand cmd = new SqlCommand("Sp_UpdatePaymentRecord", con))
                 {
                     try
                     {
 
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", model.Id));
-                        cmd.Parameters.Add(new SqlParameter("@ProductId", model.ProductId));
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@grossAmount", model.grossAmount));
+                        cmd.Parameters.Add(new SqlParameter("@discountAmount", model.discountAmount));
+                        cmd.Parameters.Add(new SqlParameter("@vatAmount", model.vatAmount));
+                        cmd.Parameters.Add(new SqlParameter("@receiveTotal", model.receiveTotal));
                         cmd.Parameters.Add(new SqlParameter("@CustomerId", model.CustomerId));
-                        cmd.Parameters.Add(new SqlParameter("@rate", model.rate));
-                        cmd.Parameters.Add(new SqlParameter("@quantity", model.quantity));
-                        cmd.Parameters.Add(new SqlParameter("@billDate", model.billDate));
-                        cmd.Parameters.Add(new SqlParameter("@boucherNumber", model.boucherNumber));
+                        cmd.Parameters.Add(new SqlParameter("@payType", model.payType));
+                        cmd.Parameters.Add(new SqlParameter("@remarks", model.remarks));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;
@@ -165,7 +170,7 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
             {
                 try
                 {
-                    using (SqlCommand cmd = new SqlCommand("Sp_DeleteSaleRecord", con))
+                    using (SqlCommand cmd = new SqlCommand("Sp_DeletePaymentRecord", con))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));

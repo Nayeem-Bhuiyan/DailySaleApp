@@ -24,6 +24,8 @@ using NayeemSaleApp.Services.MasterDataServiceInformation;
 using NayeemSaleApp.Services.MasterDataServiceInformation.Interfaces;
 using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
 using NayeemSaleApp.Services.SaleRecordServiceInformation;
+using NayeemSaleApp.Services.PaymentRecordServiceInformation.Interfaces;
+using NayeemSaleApp.Services.PaymentRecordServiceInformation;
 
 namespace NayeemSaleApp
 {
@@ -125,16 +127,18 @@ namespace NayeemSaleApp
 
 
 
-            //#region SaleRecordService
-            //services.AddScoped<ISaleRecordService, SaleRecordService>();
-            //#endregion
-            //#region ProductService
-            //services.AddScoped<IProductService, ProductService>();
-            //#endregion
+            #region SaleRecordService
+            services.AddScoped<ISaleRecordService, SaleRecordService>();
+            #endregion
+            #region ProductService
+            services.AddScoped<IProductService, ProductService>();
+            #endregion
             #region CustomerService
             services.AddScoped<ICustomerService, CustomerService>();
             #endregion
-
+            #region PaymentRecordService
+            services.AddScoped<IPaymentRecordService, PaymentRecordService>();
+            #endregion
             #region PDF
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             #endregion
