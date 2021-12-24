@@ -11,8 +11,6 @@ namespace NayeemSaleApp.Data.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DefaultValue(0)]
-        public int? isDelete { get; set; }
-
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }
