@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NayeemSaleApp.Data.Entity.PaymentRecordEntity
 {
-    public class PaymentRecord
+    public class PaymentRecord:Base
     {
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }

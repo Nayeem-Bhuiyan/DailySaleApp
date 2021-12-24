@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NayeemSaleApp.Data.Entity;
+using NayeemSaleApp.Data.Entity.MasterDataEntity;
+using NayeemSaleApp.Data.Entity.PaymentRecordEntity;
+using NayeemSaleApp.Data.Entity.SaleRecordEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +21,9 @@ namespace NayeemSaleApp.Data
             this._httpContextAccessor = _httpContextAccessor;
         }
 
-        //public DbSet<DailyExpense> DailyExpenses { get; set; }
-        //public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<SaleRecord> SaleRecords { get; set; }
+        public DbSet<PaymentRecord> PaymentRecords { get; set; }
     }
 }
