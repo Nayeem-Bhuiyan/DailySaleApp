@@ -20,7 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using NayeemSaleApp.Services.MasterDataServiceInformation;
+using NayeemSaleApp.Services.MasterDataServiceInformation.Interfaces;
+using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
+using NayeemSaleApp.Services.SaleRecordServiceInformation;
 
 namespace NayeemSaleApp
 {
@@ -122,11 +125,15 @@ namespace NayeemSaleApp
 
 
 
-            //#region IDailyExpenseService
-            //services.AddScoped<IDailyExpenseService, DailyExpenseService>();
+            //#region SaleRecordService
+            //services.AddScoped<ISaleRecordService, SaleRecordService>();
             //#endregion
-
-
+            //#region ProductService
+            //services.AddScoped<IProductService, ProductService>();
+            //#endregion
+            //#region CustomerService
+            //services.AddScoped<ICustomerService, CustomerService>();
+            //#endregion
 
             #region PDF
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
