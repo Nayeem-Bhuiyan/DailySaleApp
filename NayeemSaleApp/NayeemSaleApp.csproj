@@ -16,10 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Areas\Controllers\" />
-    <Folder Include="Areas\Areas\Data\" />
-    <Folder Include="Areas\Areas\Models\" />
-    <Folder Include="Areas\Areas\Views\" />
+    <Folder Include="Areas\" />
+    <Folder Include="Areas\MasterData\Controllers\" />
+    <Folder Include="Areas\MasterData\Data\" />
+    <Folder Include="Areas\MasterData\Models\" />
+    <Folder Include="Areas\MasterData\Views\" />
   </ItemGroup>
 
 </Project>
