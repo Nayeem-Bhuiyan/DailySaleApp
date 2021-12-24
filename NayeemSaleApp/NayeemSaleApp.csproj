@@ -19,12 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\MasterData\Controllers\" />
     <Folder Include="Areas\MasterData\Data\" />
-    <Folder Include="Areas\MasterData\Views\" />
-    <Folder Include="Areas\Sale\Controllers\" />
     <Folder Include="Areas\Sale\Data\" />
-    <Folder Include="Areas\Sale\Views\" />
   </ItemGroup>
 
 </Project>
