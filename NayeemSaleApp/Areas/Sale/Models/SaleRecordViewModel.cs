@@ -8,6 +8,7 @@ namespace NayeemSaleApp.Areas.Sale.Models
 {
     public class SaleRecordViewModel
     {
+           //SaleCord
         public int SaleRecordId { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
@@ -17,7 +18,7 @@ namespace NayeemSaleApp.Areas.Sale.Models
         public int? quantity { get; set; }
         public DateTime? billDate { get; set; }
         public string boucherNumber { get; set; }
-
+            //PayRecord
         public int PaymentRecordId { get; set; }
         public float? grossAmount { get; set; }
         public float? discountAmount { get; set; }
@@ -25,7 +26,7 @@ namespace NayeemSaleApp.Areas.Sale.Models
         public float? receiveTotal { get; set; }
         public int? payType { get; set; }
         public string remarks { get; set; }
-
-        public float totalItemCount { get; set; }
+          //Other
+        public int? totalItemCount { get; set; }
     }
 }
