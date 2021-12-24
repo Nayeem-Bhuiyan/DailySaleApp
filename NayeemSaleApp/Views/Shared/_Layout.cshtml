@@ -1,48 +1,238 @@
-﻿<!DOCTYPE html>
+﻿@using NayeemSaleApp.Services.AuthService.Interfaces
+@using System
+
+@inject IUserInfoes userInfo
+@{
+
+    var userInfos = await userInfo.GetUserInfoByUser(@User.Identity.Name);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NayeemSaleApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Sale</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <meta name="author" content="Pike Web Development - https://www.pikephp.com">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Font Awesome CSS -->
+    <link href="/assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Custom CSS -->
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css" />
+
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+    <!-- END CSS for this page -->
+    <link href="~/assets/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/assets/flatpikr/material_green.css" rel="stylesheet" />
+    <link href="~/assets/select2/dist/css/select2.min.css" rel="stylesheet" />
+    @RenderSection("Style", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NayeemSaleApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+<body class="adminbody">
+
+    <div id="main">
+        <!-- top bar navigation -->
+        <div class="headerbar">
+            <!-- LOGO -->
+            <div class="headerbar-left">
+                <a href="index.html" class="logo"><img alt="Logo" src="/DesignImage/LoginLogo.png" /> <span>Expense</span></a>
+            </div>
+            <nav class="navbar-custom">
+                <ul class="list-inline float-right mb-0">
+                    <li class="list-inline-item dropdown notif">
+                        <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            <img src="/assets/images/avatars/admin.png" alt="Profile image" class="avatar-rounded">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                            @if (userInfos?.UserName != null && User.Identity.IsAuthenticated)
+                            {
+                                <!-- item-->
+                                <div class="dropdown-item noti-title">
+                                    <h5 class="text-overflow"><small>@userInfos?.UserName</small> </h5>
+                                </div>
+                                <!-- item-->
+                                <a href="/Home/Index" class="dropdown-item notify-item">
+                                    <i class="fa fa-user"></i> <span>Profile</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:;" id="changePassword" class="dropdown-item notify-item" data-toggle="modal" data-target="#changePasswordModals">
+                                    <i class="fa fa-power-off"></i> <span>Change Password</span>
+                                </a>
+                                <a href="#" id="LogOut" class="dropdown-item notify-item" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fa fa-power-off"></i> <span>Logout</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/Auth/Account/Login" id="LogOut" class="dropdown-item notify-item">
+                                    <i class="fa fa-power-off"></i> <span>Login</span>
+                                </a>
+                            }
+                        </div>
+                    </li>
+                </ul>
+                <ul class="list-inline menu-left mb-0">
+                    <li class="float-left">
+                        <button class="button-menu-mobile open-left">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- End Navigation -->
+        <!-- Left Sidebar -->
+        <div class="left main-sidebar">
+            <div class="sidebar-inner leftscroll">
+                <div id="sidebar-menu">
+                    <ul>
+                        @if (userInfos?.UserName != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="submenu">
+                                <a href="/DailyExpenseArea/DailyExpense/Index"><i class="fa fa-fw fa-area-chart"></i><span>Daily Expense</span> </a>
+                            </li>
+                            <li class="submenu">
+                                <a href="/DailyExpenseArea/DailyExpense/SearchInformation"><i class="fa fa-fw fa-area-chart"></i><span>Search Expense</span> </a>
+                            </li>
+
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-fw fa-table"></i> <span> Category </span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="/CategoryArea/Category/Index">Create Category</a></li>
+                                    @*<li><a href="tables-datatable.html">Data Tables</a></li>*@
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="submenu">
+                                <a class="active" href="/Auth/Account/Login"><i class="fa fa-fw fa-bars"></i><span>Login</span> </a>
+                            </li>
+                        }
                     </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- END container-fluid -->
+            </div>
+            <!-- END content -->
+        </div>
+        <!-- END content-page -->
+        <footer class="footer">
+            <span class="text-right">
+                Copyright <a target="_blank" href="#">Daily Expense Tracker</a>
+            </span>
+            <span class="float-right">
+                Powered by <a target="_blank" href="#"><b>Nayeem Bhuiyan</b></a>
+            </span>
+        </footer>
+    </div>
+    <!-- END main -->
+    <script src="/assets/js/modernizr.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/detect.js"></script>
+    <script src="/assets/js/fastclick.js"></script>
+    <script src="/assets/js/jquery.blockUI.js"></script>
+    <script src="/assets/js/jquery.nicescroll.js"></script>
+    <script src="~/assets/flatpikr/flatpickr.min.js"></script>
+    <script src="~/assets/select2/dist/js/select2.full.min.js"></script>
+    <!-- App js -->
+    <script src="/assets/js/pikeadmin.js"></script>
+    <!-- BEGIN Java Script for this page -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Counter-Up-->
+    <script src="/assets/plugins/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="/assets/plugins/counterup/jquery.counterup.min.js"></script>
+    <script src="~/assets/sweetalert2/dist/sweetalert2.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- END Java Script for this page -->
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <form method="post" asp-area="Auth" asp-controller="Account" asp-action="Logout" id="logoutForm" class="navbar-right">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Logout</button>
+                    </form>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - NayeemSaleApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Password Change Modal-->
+    <div class="modal fade" id="changePasswordModals" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Password </h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color:red">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form asp-area="Auth" asp-controller="Account" asp-action="ChangePassword" method="post" role="form" data-parsley-validate="parsley">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="OldPassword">Current Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="OldPassword" name="OldPassword" autocomplete="off" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="Password">New Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="Password" name="Password" autocomplete="off" data-parsley-required="true" placeholder="Password must have a numeric number" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="ConfirmPassword">Confirm Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" autocomplete="off" data-parsley-required="true" placeholder="Password must have a numeric number" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                <button type="submit" style="float:right;" class="btn btn-success">Submit</button>
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+
+
 </body>
 </html>
