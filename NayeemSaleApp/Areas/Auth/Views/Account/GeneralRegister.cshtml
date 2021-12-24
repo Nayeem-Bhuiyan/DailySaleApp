@@ -1,0 +1,231 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using NayeemSaleApp.Data.Entity
+@using NayeemSaleApp.Areas.Auth.Models
+@model RegisterViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+
+    <link rel="shortcut icon" href="~/appslogo/Specialbranch.png" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.7/css/mdb.min.css" rel="stylesheet">
+    <link href="~/SweetAlert/sweetalert2.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="card-body">
+       
+        <div class="row col-md-12">
+            <div class="container col-md-8">
+                <div class="card">
+                    <div class="card" style="background-color:#20119d">
+                    </div>
+                </div>
+            </div>
+            <div class="container col-md-7">
+
+                <h3 style="color:black;font-weight: 700;width:110%;padding-left:5%"><img src="https://www.eatlogos.com/all_free_logos/png/vector_jewellery_shop_logo.png" style="margin:1px 1px 1px 1px;width:50px;height:50px" />My Software Register</h3>
+                <div class="card">
+
+                    <h5 class="card-header white-text text-center py-4" style="font-size:x-large;background-color: #23017C;">
+                        <strong>
+                            Register
+                        </strong>
+                    </h5>
+
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+
+                        <!-- Form -->
+                        <form class="text-center" asp-area="Auth"  asp-controller="Account" asp-action="GeneralRegister" style="color: #757575;" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" data-parsley-validate="parsley">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <br />
+                            <!-- E-mail -->
+                            <div class="md-form mt-0">
+                                <input type="email" id="Email" name="Email" onchange="DuplicateEmail()" class="form-control" placeholder="Enter the E-mail">
+                            </div>
+
+                            <div class="md-form mt-0">
+                                <input type="text" name="Name" id="Name" onchange="DuplicateUaserName()" class="form-control" placeholder="Enter the User Name">
+                                @*<label for="materialRegisterFormEmail" name="Name">User ID</label>*@
+                                <input type="hidden" name="UserTypeName" value="5" />
+                                <input type="hidden" id="userid" name="userid">
+                            </div>
+
+                            <div class="md-form">
+                                <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" placeholder="Enter the phone number" aria-describedby="materialRegisterFormPhoneHelpBlock">
+                                @*<label for="materialRegisterFormPhone">Phone number</label>*@
+                            </div>
+                            @*<label for="licenseNumber" class="col-sm-2 col-form-label">@Model.fLang.licenseNumber *</label>*@
+                            <div class="md-form">
+                                <input type="password" data-parsley-required="true" data-parsley-equalto="#ConfirmPassword" name="Password" id="Password" placeholder="Enter the Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                            </div>
+
+                            <div class="md-form">
+                                <input type="password" data-parsley-required="true" data-parsley-equalto="#Password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm the Password" class="form-control" aria-describedby="materialRegisterFormConfirmPasswordHelpBlock">
+                            </div>
+                            <button style="display:none" id="btnSubmit" type="submit">Register</button>
+                            <button class="btn btn-info my-4 btn-block" style="font-size:x-large;background-color: #23017C !important;" type="button" onclick="Register()">Register</button>
+                            <p>
+                                <em>Already have an account?</em>
+                                <a asp-controller="Account" asp-action="Login" style="font-size:large">Login </a>here
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="~/js/common.js"></script>
+    <script src="~/js/parsly.js"></script>
+    <script src="~/SweetAlert/sweetalert2.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#divisionId').change(function () {
+                var id = $('#divisionId').val();
+                DisplayDiv(id);
+            })
+            $('#districtId').change(function () {
+                var id = $('#districtId').val();
+                DisplayDis(id);
+            })
+        })
+        function DisplayDiv(id) {
+            //alert(id);
+            Common.Ajax('GET', '/global/api/GetAllDistrictByDivisionId/' + id, [], 'json', ajaxDistrict);
+        }
+        function DisplayDis(id) {
+            Common.Ajax('GET', '/global/api/GetThanaByDistrictId/' + id, [], 'json', ajaxThana);
+        }
+
+        function ajaxDistrict(response) {
+            $('#thanaId').val(0);
+            //var options = '<option value="0">Select</option>';
+            var options = '<option value="0">Select District</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.districtName + '</option>';
+            });
+            $('#districtId').empty();
+            $('#districtId').append(options);
+        }
+        function ajaxThana(response) {
+            //var options = '<option value="0">Select</option>';
+            var options = '<option value="0">Select Thana</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.thanaName + '</option>';
+            });
+            $('#thanaId').empty();
+            $('#thanaId').append(options);
+        }
+        function Register() {
+            var email = $('#Email').val();
+            if (email == '') {
+                swal('Warning', 'Please Enter E-mail Address', 'warning');
+                return false;
+            }
+            var name = $('#Name').val();
+            if (name == '') {
+                swal('Warning', 'Please Enter User Name', 'warning');
+                return false;
+            }
+            var phn = $('#PhoneNumber').val();
+            if (phn == '') {
+                swal('Warning', 'Please Enter Phone Number', 'warning');
+                return false;
+            }
+            var type = $('#userTypeId').val();
+            if (type == 0) {
+                swal('Warning', 'Please Enter License Type', 'warning');
+                return false;
+            }
+
+            var div = $('#divisionId').val();
+            if (div == 0) {
+                swal('Warning', 'Please select Division', 'warning');
+                return false;
+            }
+            var dis = $('#districtId').val();
+            if (dis == 0) {
+
+                swal('Warning', 'Please select District', 'warning');
+                return false;
+
+            }
+
+            var th = $('#thanaId').val();
+            if (th == 0) {
+                swal('Warning', 'Please select Thana', 'warning');
+                return false;
+            }
+            var psw = $('#Password').val();
+            if (psw == '') {
+                swal('Warning', 'Please Enter Password', 'warning');
+                return false;
+            }
+            var cpw = $('#ConfirmPassword').val();
+            if (cpw == '') {
+                swal('Warning', 'Please Enter ConfirmPassword', 'warning');
+                return false;
+            }
+
+
+
+            $('#btnSubmit').click();
+        }
+        function DuplicateUaserName() {
+            //alert(121);
+            var uName = $("#Name").val()
+            $.ajax({
+                type: 'GET',
+                url: '/Auth/Account/RestrictDuplicateUserName',
+                data: { 'uName': uName },
+                datatType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data !== 'Not Used') {
+                        //$("#Name").val('');
+                        swal('Warning', data + ' User Name has already used!', 'warning');
+                        $("#Name").val('');
+                        return false;
+                    }
+                }
+            })
+        }
+        function DuplicateEmail() {
+            var uName = $("#Email").val()
+            $.ajax({
+                type: 'GET',
+                url: '/Auth/Account/RestrictDuplicateEmail',
+                data: { 'email': uName },
+                datatType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data !== 'Not Used') {
+                        swal('Warning', data + ' Email has already used!', 'warning');
+                        $("#Email").val("");
+                        return false;
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using NayeemSaleApp.Data.Entity
+@using NayeemSaleApp.Areas.Auth.Models
+@model LogInViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="shortcut icon" href="~/appslogo/Specialbranch.png" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.7/css/mdb.min.css" rel="stylesheet">
+    @*<link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <link href="~/css/sb-admin-2.min.css" rel="stylesheet">*@
+
+    <style>
+        /*.centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-150%, -150%);
+        }*/
+        .form-control {
+            background-color: #66ffff !important;
+            font-size: 24px !important;
+            text-align: center;
+            border: 1px solid #66ffff !important;
+            /*border:0!important;*/
+            color: #fff !important;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .bg-image {
+            /* The image used */
+            /*background-image: url("/images/whatsapp image 2021-01-11 at 2.26.28 pm.jpeg");*/
+            background-color: #fff !important;
+            /*background-image: url('../../../../wwwroot/images/whatsapp image 2021-01-11 at 2.26.28 pm.jpeg');*/
+            /* Add the blur effect */
+            filter: blur(8px);
+            -webkit-filter: blur(5px);
+            /* Full height */
+            height: 100vh;
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Position text in the middle of the page/image */
+        .bg-text {
+            font-weight: bold;
+            position: absolute;
+            top: 43%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            width: 60%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-control::-webkit-input-placeholder {
+            color: #8D74D9;
+        }
+
+        ul li {
+            list-style: none;
+            font-size: 12px;
+            padding-top: 0 !important;
+        }
+
+
+        @@media screen and (min-width: 480px) {
+            .LargePhont {
+                color: #fff;
+                margin-bottom: 32px;
+                font-family: Impact;
+                font-size: 20px
+            }
+            .frmPosition {
+                margin-left: 50px;
+            }
+
+            .textBoxStyle {
+                font-size: 10Px !important;
+                margin-right: 10px !important;
+                width: 90% !important;
+                padding: 15px 0 !important;
+                margin-left: 10px !important
+            }
+
+            .btnLogin {
+                font-size: 12px !important;
+                margin-right: 10px !important;
+                width: 90% !important;
+                padding: 5px 0 !important;
+                margin-left: 10px !important;
+                color: #73C6EB !important
+            }
+
+            .frmDivSize {
+                height: 200px;
+            }
+
+            body {
+                font-size: 10px !important;
+            }
+
+           }
+
+        @@media screen and (min-width: 768px) {
+            .LargePhont {
+                color: #fff;
+                margin-bottom: 20px;
+                font-family: Impact;
+                font-size: 25px
+            }
+
+            .frmPosition {
+                margin-left: 75px;
+            }
+
+            .textBoxStyle {
+                font-size: 15Px !important;
+                margin-right: 12px !important;
+                width: 90% !important;
+                padding: 20px 0 !important;
+                margin-left: 12px !important
+            }
+
+            .btnLogin {
+                font-size: 16px !important;
+                margin-right: 12px !important;
+                width: 90% !important;
+                padding: 6px 0 !important;
+                margin-left: 12px !important;
+                color: #73C6EB !important
+            }
+
+            .frmDivSize {
+                height: 250px;
+            }
+
+            body {
+                font-size: 12px !important;
+            }
+        }
+
+        @@media screen and (min-width: 992px) {
+            .LargePhont {
+                color: #fff;
+                margin-bottom: 32px;
+                font-family: Impact;
+                font-size: 30px
+            }
+
+            .frmPosition {
+                margin-left: 150px;
+            }
+
+            .textBoxStyle {
+                font-size: 20Px !important;
+                margin-right: 18px !important;
+                width: 90% !important;
+                padding: 25px 0 !important;
+                margin-left: 18px !important
+            }
+
+            .btnLogin {
+                font-size: 20px !important;
+                margin-right: 18px !important;
+                width: 90% !important;
+                padding: 8px 0 !important;
+                margin-left: 18px !important;
+                color: #73C6EB !important
+            }
+
+            .frmDivSize {
+                height: 280px;
+            }
+
+            body {
+                font-size: 14px !important;
+            }
+
+        }
+
+        @@media screen and (min-width: 1200px) {
+            .LargePhont {
+                color: #fff;
+                margin-bottom: 32px;
+                font-family: Impact;
+                font-size: 35px
+            }
+
+            .frmPosition {
+                margin-left: 200px;
+            }
+
+            .textBoxStyle {
+                font-size: 26Px !important;
+                margin-right: 20px !important;
+                width: 90%;
+                padding: 27px 0;
+                margin-left: 20px !important
+            }
+
+            .btnLogin {
+                font-size: 23px !important;
+                margin-right: 20px !important;
+                width: 90% !important;
+                padding: 10px 0!important;
+                color: #73C6EB !important
+            }
+
+            .frmDivSize {
+                height:300px;
+            }
+
+            body {
+                font-size: 16px !important;
+            }
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+    <!-- Material form register -->
+
+    <div class="bg-text">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-8 col-lg-9 col-md-10 col-sm-12 frmPosition">
+                    <p class="text-center p-0 m-0 pb-1">
+                        <img src="/DesignImage/LoginLogo.png" width="100" style="margin:0 auto;margin-top:55px;height:100px" />
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid">
+
+            <!-- Outer Row -->
+            <div class="row">
+                <div class="col-xl-8 col-lg-9 col-md-10 col-sm-12 frmPosition">
+
+                    <div class="card centered frame" style="background-color:#006400; border:none!important; border-radius:10px!important; margin:0!important">
+                        <div class="card-body p-0">
+                            <div class="row">
+                                
+                                <div class="col-lg-12">
+                                    <div class="p-4 mt-1">
+                                        <div class="text-center frmDivSize">
+                                            <h6 class="LargePhont">Daily Expense Tracker</h6>
+
+                                         
+                                            <form class="user" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                                                <div asp-validation-summary="All" class="text-danger"></div>
+                                                <div class="form-group">
+                                                    <input type="text"  class="form-control textBoxStyle" id="exampleInputEmail" name="Name" aria-describedby="emailHelp" placeholder="Enter Email" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" class="form-control textBoxStyle" name="Password" id="exampleInputPassword" placeholder="Enter Password" required>
+                                                </div>
+                                               
+                                                <button type="submit" class="btn btn-light text-primary btn-block btnLogin">
+                                                    Login
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                        <label style="color:#fff!important;">Don't have account?</label><a href="/Auth/Account/Register">Register</a>
+                                        <p style=" margin-top:0!important; color:#fff!important" href="#"><i class="fas fa-phone-square-alt"></i><i class="fas fa-phone-square"></i> Helpline:01755391672</p>
+                                      
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/css/mdb.min.css" rel="stylesheet">
+
+
+</body>
+</html>

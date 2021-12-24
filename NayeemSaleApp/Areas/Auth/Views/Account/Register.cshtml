@@ -1,0 +1,82 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.7/css/mdb.min.css" rel="stylesheet">
+    @*<link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <link href="~/css/sb-admin-2.min.css" rel="stylesheet">*@
+    <link href="~/SweetAlert/sweetalert2.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Material form register -->
+
+    <div class="card-body">
+        <div class="row col-md-12">
+            <div class="container col-md-8">
+                <div class="card">
+                    <div class="card" style="background-color:#20119d">
+                    </div>
+                </div>
+            </div>
+            <div class="container col-md-7">
+                <div class="card">
+                    <h5 class="card-header info-color white-text text-center py-4" style="font-size:x-large">
+                        <strong>
+                            New Registration
+                        </strong>
+                    </h5>
+
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+                        <!-- Form -->
+                        <form class="text-center" asp-area="Auth" asp-controller="Account" asp-action="GeneralRegister" style="color: #757575;" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                            <br />
+                            <!-- E-mail -->
+                            <div class="md-form mt-0">
+                                <input type="email" id="materialRegisterFormEmail" name="Email" class="form-control" placeholder="Enter Email">
+                            </div>
+                            <div class="md-form mt-0">
+                                <input type="text" name="Name" id="materialRegisterFormEmail" class="form-control" placeholder="Enter User Name">
+                                <input type="hidden" name="UserTypeName" value="5" />
+                                <input type="text" id="userid" name="userid" hidden>
+                            </div>
+                            <div class="md-form">
+                                <input type="text" name="PhoneNumber" id="materialRegisterFormPhone" class="form-control" placeholder="Enter Mobile Number" aria-describedby="materialRegisterFormPhoneHelpBlock">
+                            </div>
+                            <div class="md-form">
+                                <input type="password" name="Password" id="materialRegisterFormPassword" placeholder="Enter Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                              
+                            </div>
+                            <div class="md-form">
+                                <input type="password" name="ConfirmPassword" id="materialRegisterFormConfirmPassword" placeholder="Enter Confirm Password" class="form-control" aria-describedby="materialRegisterFormConfirmPasswordHelpBlock">
+                            </div>
+                            <button class="btn btn-info my-4 btn-block" style="font-size:x-large" type="submit">Register</button>
+                            <p>
+                            <a asp-area="Auth" asp-controller="Account" asp-action="Login" style="font-size:large">Login</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+    <script src="~/SweetAlert/sweetalert2.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/css/mdb.min.css" rel="stylesheet">
+</body>
+</html>
