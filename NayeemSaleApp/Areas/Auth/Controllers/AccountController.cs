@@ -66,7 +66,7 @@ namespace NayeemSaleApp.Areas.Auth.Controllers
                         var result = await _signInManager.PasswordSignInAsync(model.Name, model.Password, model.RememberMe, lockoutOnFailure: true);
                         if (result.Succeeded)
                         {
-                            return RedirectToAction("Index", "DailyExpense", new { area = "DailyExpenseArea"});
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {
@@ -244,13 +244,15 @@ namespace NayeemSaleApp.Areas.Auth.Controllers
             if (Url.IsLocalUrl(returnUrl))
             {
                 var userId = HttpContext.User.Identity.Name;
-                return RedirectToAction("Index", "DailyExpense", new { area = "DailyExpenseArea" });
+                //return RedirectToAction("Index", "Home", new { area = "DailyExpenseArea" });
+                return RedirectToAction("Index", "Home");
 
             }
             else
             {
                 var userId = HttpContext.User.Identity.Name;
-                return RedirectToAction("Index", "DailyExpense", new { area = "DailyExpenseArea" });
+                //return RedirectToAction("Index", "DailyExpense", new { area = "DailyExpenseArea" });
+                return RedirectToAction("Index", "Home");
 
             }
         }
