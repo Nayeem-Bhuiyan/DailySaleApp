@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NayeemSaleApp.Areas.MasterData.Controllers
 {
+    [Area("MasterData")]
     public class ProductInfoController : Controller
     {
         public IActionResult Index()

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NayeemSaleApp.Areas.Sale.Controllers
 {
+    [Area("Sale")]
     public class SaleRecordInfoController : Controller
     {
         public IActionResult Index()
