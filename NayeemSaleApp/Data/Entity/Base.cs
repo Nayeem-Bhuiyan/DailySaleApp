@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DailyExpenseTracker.Data.Entity
+namespace NayeemSaleApp.Data.Entity
 {
     public class Base
     {

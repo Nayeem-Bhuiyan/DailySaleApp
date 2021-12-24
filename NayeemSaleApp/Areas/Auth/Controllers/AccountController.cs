@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NayeemSaleApp.Areas.Auth.Models;
 using NayeemSaleApp.Controllers;
-using NayeemSaleApp.Data.Entity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NayeemSaleApp.Services.AuthService.Interfaces;
 using NayeemSaleApp.Helpers;
+using NayeemSaleApp.Data.Entity;
 
 namespace NayeemSaleApp.Areas.Auth.Controllers
 {

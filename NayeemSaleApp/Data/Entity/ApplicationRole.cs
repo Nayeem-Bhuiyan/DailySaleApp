@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DailyExpenseTracker.Data.Entity
+namespace NayeemSaleApp.Data.Entity
 {
     public class ApplicationRole : IdentityRole
     {

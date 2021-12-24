@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DailyExpenseTracker.Data.Entity;
+using NayeemSaleApp.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DailyExpenseTracker.Data
+namespace NayeemSaleApp.Data
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {

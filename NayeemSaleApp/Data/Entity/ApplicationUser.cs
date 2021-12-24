@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DailyExpenseTracker.Data.Entity
+namespace NayeemSaleApp.Data.Entity
 {
     public class ApplicationUser: IdentityUser
     {
