@@ -118,15 +118,15 @@
                                     <br />
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12">
-                                            <label for="ProductId">Receive Amount</label>
+                                            <label for="receiveTotal">Receive Amount</label>
                                             <div>
-                                                <input type="text" id="receiveTotal" name="receiveTotal" placeholder="Enter receive Amount" required autocomplete="off">
+                                                <input type="text" class="numeric" id="receiveTotal" name="receiveTotal" placeholder="Enter receive Amount" required autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
-                                            <label for="ProductId">Change Amount</label>
+                                            <label for="changeAmount">Change Amount</label>
                                             <div>
-                                                <input type="text" id="changeAmount" name="changeAmount" placeholder="Change Amount" required readonly>
+                                                <input type="text" id="changeAmount" name="changeAmount" class="bg-success text-white" placeholder="Change Amount" required readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
@@ -159,13 +159,13 @@
                                     <div class="form-group row">
                                         <label for="grossAmount" class="col-sm-5">Gross Amount</label>
                                         <div class="col-sm-7">
-                                            <input type="text" name="grossAmount" id="grossAmount" value="" />
+                                            <input type="text" name="grossAmount" id="grossAmount" class="bg-success text-white" value="0" readonly/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="discountAmount" class="col-sm-5">Discount Amount</label>
                                         <div class="col-sm-7">
-                                            <input type="text" name="discountAmount" id="discountAmount" value="" />
+                                            <input type="text" name="discountAmount" class="numeric" id="discountAmount" value="" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -177,7 +177,7 @@
                                     <div class="form-group row">
                                         <label for="vatAmount" class="col-sm-5">Vat Amount</label>
                                         <div class="col-sm-7">
-                                            <input type="text" name="vatAmount" id="vatAmount" value="" />
+                                            <input type="text" name="vatAmount" class="numeric" id="vatAmount" value="" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -194,7 +194,7 @@
                     <div class="row">
                         <div class="col-md-12 justify-content-end">
                             <div class="card">
-                                <button type="submit" class="btn btn-success">Save Sale Bill</button>
+                                <button type="submit" class="btn btn-primary">Save Sale Bill</button>
                             </div>
                         </div>
                     </div>
@@ -263,7 +263,6 @@
             $("#tblData").DataTable({
                 order: [[0, "desc"]]
             });
-
             $('#CustomerId').select2();
             var d = new Date();
             var strDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
@@ -286,12 +285,71 @@
             });
         })
 
+        let uniBocherCode = () => {
+            var date = new Date();
+            var components = [
+                date.getYear(),
+                date.getMonth(),
+                date.getDate(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds(),
+                date.getMilliseconds()
+            ];
+
+            return components.join("");
+        }
+
         function Clear() {
             $("#productCode").val('');
             $("#ProductId").val('');
             $("#rate").val('');
             $("#quantity").val('');
         }
+
+        let clearPayment = () => {
+            $("#grossAmount").val(0);
+            $("#netAmount").val('');
+            $("#vatAmount").val('');
+            $("#discountAmount").val('');
+        }
+
+        $("#discountAmount").keyup(function() {
+            if ($("#grossAmount").val() !== 'undefinded' && $(this).val() !== 'undefinded' && $(this).val()!=="") {
+                $("#netAmount").val(parseInt($("#grossAmount").val())- parseInt($(this).val()));
+            } else {
+                $("#netAmount").val(0);
+            }
+        })
+
+        $("#vatAmount").keyup(function () {
+            if ($("#netAmount").val() !== 'undefinded' && $(this).val() !== 'undefinded'&& $("#netAmount").val()!=="") {
+                
+                if (!isNaN(parseInt($("#netAmount").val()) + parseInt($(this).val()))) {
+                    $("#grandTotal").text(parseInt($("#netAmount").val()) + parseInt($(this).val()));
+                }else {
+                    $("#grandTotal").text('');
+                }
+            } else {
+                $("#grandTotal").text('');
+            }
+        })
+        $("#receiveTotal").keyup(function () {
+            
+            if ($(this).val() !== 'undefinded' && $(this).val() !== "") {
+              
+                let total = parseInt($("#grandTotal").text() - $(this).val());
+                if (!isNaN(total)) {
+                    $("#changeAmount").val(total);
+                } else {
+                    $("#changeAmount").val("");
+                }
+                
+            } else {
+                $("#changeAmount").val('');
+            }
+        })
+        
 
         $("#tblAddProducts tbody").on('click', '.remove', function () {
             $(this).closest('tr').remove();
@@ -305,6 +363,7 @@
             });
 
             $("#tblAddProducts tfoot tr").find("td").eq(1).text(parseInt(totalBill))
+            $("#grossAmount").val(parseInt(totalBill))
         }
 
         let validationAddData = () => {

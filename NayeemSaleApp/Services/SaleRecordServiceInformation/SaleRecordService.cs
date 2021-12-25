@@ -106,7 +106,7 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_InsertSaleRecord", con))
+                using (SqlCommand cmd = new SqlCommand("sp_InsertSaleRecord", con))
                 {
                     try
                     {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NayeemSaleApp.Areas.Sale.Models;
+using NayeemSaleApp.Data.Entity.PaymentRecordEntity;
+using NayeemSaleApp.Data.Entity.SaleRecordEntity;
 using NayeemSaleApp.Services.MasterDataServiceInformation.Interfaces;
 using NayeemSaleApp.Services.PaymentRecordServiceInformation.Interfaces;
 using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
@@ -42,42 +44,67 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
 
-            //[HttpPost]
-            //[ValidateAntiForgeryToken]
-            //public async Task<ActionResult> Index([FromForm] SaleRecordViewModel model)
-            //{
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index([FromBody] SaleRecordViewModel model)
+        {
+            bool response = false;
+            if (model.ProductId > 0)
+            {
+              
+                SaleRecord SaleRecordObj = new SaleRecord
+                {
+                     Id = model.SaleRecordId,
+                     ProductId =model.ProductId,
+                     CustomerId =model.CustomerId,
+                     rate =model.rate,
+                     quantity =model.quantity,
+                     billDate =model.billDate,
+                     boucherNumber =uniqueBoucherNumber,
+                };
+                if (model.SaleRecordId>0)
+                {
+                    response=await _SaleRecordService.Update(SaleRecordObj);
+                }
+                else
+                {
+                    response=await _SaleRecordService.Insert(SaleRecordObj);
+                 
+                }
+                
 
-            //    if (model.ProductId > 0)
-            //    {
+                PaymentRecord PaymentObj = new PaymentRecord
+                {
+                     Id=model.PaymentRecordId,
+                     CustomerId =model.CustomerId,
+                     grossAmount =model.grossAmount,
+                     discountAmount =model.discountAmount,
+                     vatAmount =model.vatAmount,
+                     receiveTotal =model.receiveTotal,
+                     payType =model.payType,
+                     remarks =model.remarks,
+                };
 
-            //        //Product updateObj = new Product()
-            //        //{
-            //        //    Id = model.ProductId,
-            //        //    productName = model.productName,
-            //        //    productCode = model.productCode
-            //        //};
-            //        //await _ProductService.Update(updateObj);
-            //    }
-            //    else
-            //    {
-            //        //Product insertObj = new Product()
-            //        //{
+                if (model.PaymentRecordId>0)
+                {
+                    response=await _PaymentRecordServic.Update(PaymentObj);
+                }
+                else
+                {
+                    response=await _PaymentRecordServic.Insert(PaymentObj);
+                }
+            }
+           
+            return Json(response);
 
-            //        //    productName = model.productName,
-            //        //    productCode = model.productCode
-            //        //};
-            //        //await _ProductService.Insert(insertObj);
+        }
 
-            //    }
-            //    return Redirect("/MasterData/ProductInfo/Index");
 
-            //}
+        //[HttpPost]
+        //public async Task<ActionResult> Delete(int? Id)
+        //{
+        //    return Json(await _ProductService.DeleteById(Id));
+        //}
 
-            //[HttpPost]
-            //public async Task<ActionResult> Delete(int? Id)
-            //{
-            //    return Json(await _ProductService.DeleteById(Id));
-            //}
-        
     }
 }

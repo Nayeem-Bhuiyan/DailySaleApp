@@ -108,7 +108,7 @@ namespace NayeemSaleApp.Services.PaymentRecordServiceInformation
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("Sp_InsertPaymentRecord", con))
+                using (SqlCommand cmd = new SqlCommand("sp_InsertPaymentRecord", con))
                 {
                     try
                     {
