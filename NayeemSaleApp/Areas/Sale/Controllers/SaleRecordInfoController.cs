@@ -45,8 +45,8 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([FromForm] SaleRecordViewModel model)
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index([FromBody] SaleRecordViewModel model)
         {
                 bool response = false;
                 SaleRecord SaleRecordObj = new SaleRecord
@@ -70,8 +70,7 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                  
                 }
 
-                if (model.paymentStep==true)
-                {
+
                     PaymentRecord PaymentObj = new PaymentRecord
                     {
                         Id = model.PaymentRecordId,
@@ -93,7 +92,7 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                     {
                         response = await _PaymentRecordServic.Insert(PaymentObj);
                     }
-                }
+                
             return Json(response);
 
         }

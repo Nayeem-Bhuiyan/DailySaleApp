@@ -43,7 +43,7 @@
 
             <div class="card-body">
 
-                <form autocomplete="off" id="frmData" asp-area="Sale" asp-controller="SaleRecordInfo" asp-action="Index">
+                <form id="frmData" asp-area="Sale" asp-controller="SaleRecordInfo" asp-action="Index">
                     <input type="hidden" name="SaleRecordId" id="SaleRecordId" value="" />
                     <input type="hidden" name="PaymentRecordId" id="PaymentRecordId" value="" />
                     <div class="form-group row">
@@ -66,7 +66,7 @@
                         <div class="col-md-3">
                             <label>Product Code</label>
                             <div>
-                                <input type="text" id="productCode" name="productCode" placeholder="Enter Product Code" readonly>
+                                <input type="text" id="productCode" name="productCode" placeholder="Enter Product Code">
                                 <input type="hidden" id="ProductId" name="ProductId" />
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                                             <label for="payType">Payment Mode</label>
                                             <div>
                                                 <select id="payType" name="payType" required autocomplete="off">
-                                                    <option value="value">Select</option>
+                                                    <option value="">Select</option>
                                                     <option value="1">Cash</option>
                                                     <option value="2">Check</option>
                                                     <option value="3">Mobile Banking</option>
@@ -196,7 +196,7 @@
                     <div class="row">
                         <div class="col-md-12 justify-content-end">
                             <div class="card">
-                                <button type="submit" class="btn btn-primary" id="btnSave">Save Sale Bill</button>
+                                <button type="button" class="btn btn-primary" id="btnSave">Save Sale Bill</button>
                             </div>
                         </div>
                     </div>
@@ -363,7 +363,8 @@
             });
 
             $("#tblAddProducts tfoot tr").find("td").eq(1).text(parseInt(totalBill))
-            $("#grossAmount").val(parseInt(totalBill))
+            $("#grossAmount").val(parseInt(totalBill));
+            $("#grandTotal").text($("#grossAmount").val());;
         }
 
         let validationAddData = () => {
@@ -455,9 +456,7 @@
         //}
 
 
-        $('#btnSave').click(function () {
-
-            $('#frmData').on('submit', function (event) {
+        $('#btnSave').click(function (event) {
                 event.preventDefault();
                 Swal.fire({
                     title: 'Are you sure?',
@@ -473,7 +472,6 @@
                         $('#tblAddProducts tbody tr').each(function () {
                             var CurrentRow = $(this);
                             var frmSaleRecordData = {
-                                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val(),
                                 Id :$('#SaleRecordId').val(),
                                 CustomerId: $('#CustomerId').val(),
                                 ProductId: parseInt($(this).find('td').eq(0).text()),
@@ -482,9 +480,8 @@
                                 billDate: $('#billDate').val(),
                                 boucherNumber: uniqueBocherCode(),
                             }
-                            console.log(frmSaleRecordData);
+                            
                             var frmPaymentRecordData = {
-                                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val(),
                                 CustomerId: $("#CustomerId").val(),
                                 grossAmount: $("#grossAmount").val(),
                                 discountAmount: $("#discountAmount").val(),
@@ -492,12 +489,12 @@
                                 receiveTotal: $("#receiveTotal").val(),
                                 payType: $("#payType").val(),
                                 remarks: $("#remarks").val(),
-                                paymentStep:true,
                             }
-                            console.log(frmPaymentRecordData);
+                            
 
 
-                            if ($('#tblAddProducts tbody tr').length==1) {
+                            if ($('#tblAddProducts tbody tr').length !== 1) {
+                                console.log(frmPaymentRecordData);
                                 $.ajax({
                                     url: "/Sale/SaleRecordInfo/Index",
                                     type: "POST",
@@ -510,6 +507,28 @@
                                     },
                                 }).done(function (data) {
                                     CurrentRow.remove();
+                                    console.log(data);
+                                }).fail(function () {
+                                    $("#btnSave").removeAttr('disabled');
+                                })
+                            }
+                            else {
+                                console.log(frmSaleRecordData);
+                               
+
+                                $.ajax({
+                                    url: "/Sale/SaleRecordInfo/Index",
+                                    type: "POST",
+                                    data: JSON.stringify(frmSaleRecordData),
+                                    dataType: "json",
+                                    contentType: "application/json; charset=utf-8",
+                                    beforeSend: function () {
+                                        $('#btnSave').attr('disabled', 'disabled');
+                                        $('#btnSave').val('Submitting...');
+                                    },
+                                }).done(function (data) {
+                                    CurrentRow.remove();
+                                    console.log(data);
                                     $("#btnSave").removeAttr('disabled');
 
                                 }).fail(function () {
@@ -534,61 +553,10 @@
                                     $("#btnSave").removeAttr('disabled');
                                 })
                             }
-                            else {
-                                $.ajax({
-                                    url: "/Sale/SaleRecordInfo/Index",
-                                    type: "POST",
-                                    data: frmSaleRecordData,
-                                    beforeSend: function () {
-                                        $('#btnSave').attr('disabled', 'disabled');
-                                        $('#btnSave').val('Submitting...');
-
-                                    },
-                                }).done(function (data) {
-                                    CurrentRow.remove();
-                                }).fail(function () {
-                                    $("#btnSave").removeAttr('disabled');
-                                })
-                            }
                         });
                     }
                 });
-            })
         })
-
-        function Delete(Id) {
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to retrieve this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/MasterData/CustomerInfo/Delete/" + Id,
-                        data: { Id: Id },
-                        type: 'POST'
-                    })
-                        .done(function () {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted Successfully!!',
-                                showConfirmButton: false,
-                                timer: 1000
-                            }).then(function () {
-                                window.location.reload();
-                            })
-                        })
-                        .fail(function () {
-                            swal.fire('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
-                        });
-                }
-            });
-        }
     </script>
 }
 
