@@ -46,12 +46,9 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([FromBody] SaleRecordViewModel model)
+        public async Task<ActionResult> Index([FromForm] SaleRecordViewModel model)
         {
-            bool response = false;
-            if (model.ProductId > 0)
-            {
-              
+                bool response = false;
                 SaleRecord SaleRecordObj = new SaleRecord
                 {
                      Id = model.SaleRecordId,
@@ -60,7 +57,8 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                      rate =model.rate,
                      quantity =model.quantity,
                      billDate =model.billDate,
-                     boucherNumber =uniqueBoucherNumber,
+                     boucherNumber =model.boucherNumber,
+                     createdAt=DateTime.Now
                 };
                 if (model.SaleRecordId>0)
                 {
@@ -71,30 +69,31 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                     response=await _SaleRecordService.Insert(SaleRecordObj);
                  
                 }
-                
 
-                PaymentRecord PaymentObj = new PaymentRecord
+                if (model.paymentStep==true)
                 {
-                     Id=model.PaymentRecordId,
-                     CustomerId =model.CustomerId,
-                     grossAmount =model.grossAmount,
-                     discountAmount =model.discountAmount,
-                     vatAmount =model.vatAmount,
-                     receiveTotal =model.receiveTotal,
-                     payType =model.payType,
-                     remarks =model.remarks,
-                };
+                    PaymentRecord PaymentObj = new PaymentRecord
+                    {
+                        Id = model.PaymentRecordId,
+                        CustomerId = model.CustomerId,
+                        grossAmount = model.grossAmount,
+                        discountAmount = model.discountAmount,
+                        vatAmount = model.vatAmount,
+                        receiveTotal = model.receiveTotal,
+                        payType = model.payType,
+                        remarks = model.remarks,
+                        createdAt = DateTime.Now
+                    };
 
-                if (model.PaymentRecordId>0)
-                {
-                    response=await _PaymentRecordServic.Update(PaymentObj);
+                    if (model.PaymentRecordId > 0)
+                    {
+                        response = await _PaymentRecordServic.Update(PaymentObj);
+                    }
+                    else
+                    {
+                        response = await _PaymentRecordServic.Insert(PaymentObj);
+                    }
                 }
-                else
-                {
-                    response=await _PaymentRecordServic.Insert(PaymentObj);
-                }
-            }
-           
             return Json(response);
 
         }

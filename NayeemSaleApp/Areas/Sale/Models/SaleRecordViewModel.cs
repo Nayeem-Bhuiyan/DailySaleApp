@@ -28,6 +28,7 @@ namespace NayeemSaleApp.Areas.Sale.Models
         public string remarks { get; set; }
           //Other
         public int? totalItemCount { get; set; }
+        public bool paymentStep { get; set; }
 
         public IEnumerable<Product> products { get; set; }
         public IEnumerable<Customer> customers { get; set; }
