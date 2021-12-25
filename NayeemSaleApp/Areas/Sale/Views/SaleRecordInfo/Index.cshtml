@@ -43,7 +43,6 @@
             <div class="card-body">
 
                 <form autocomplete="off" id="frmData" asp-area="MasterData" asp-controller="CustomerInfo" asp-action="Index">
-
                     <div class="form-group row">
                         <label for="CustomerId" class="col-sm-2 col-form-label">Customer</label>
                         <div class="col-sm-4">
@@ -71,48 +70,54 @@
                         <div class="col-md-3">
                             <label for="rate">Rate</label>
                             <div>
-                                <input type="text" id="rate" name="rate" placeholder="Enter rate" required>
+                                <input type="text" id="rate" name="rate" class="numeric" placeholder="Enter rate" required>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="quantity">Quantity</label>
                             <div>
-                                <input type="text" id="quantity" name="quantity" placeholder="Enter Quantity" required>
+                                <input type="text" id="quantity" name="quantity" class="numeric" placeholder="Enter Quantity" required>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label></label>
                             <div>
-                                <button type="button" class="bg-primary text-white">Add</button>
+                                <button type="button" class="bg-primary text-white" id="btnAdd">Add</button>
                             </div>
                         </div>
                     </div>
-                </form>
 
-                <br />
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-bordered table-striped table-responsive-sm" id="tblAddProducts">
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Rate</th>
-                                        <th>Quantity</th>
-                                        <th>Subtotal</th>
-                                    </tr>
-                                    <tr>
-                                        <td>ch3453</td>
-                                        <td>34534</td>
-                                        <td>4</td>
-                                        <td>345345235</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-md-12">
-                                <br />
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-striped table-responsive-sm" id="tblAddProducts">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Rate</th>
+                                                <th>Quantity</th>
+                                                <th>Subtotal</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-right">Total</td>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
                                             <label for="ProductId">Receive Amount</label>
                                             <div>
                                                 <input type="text" id="receiveTotal" name="receiveTotal" placeholder="Enter receive Amount" required autocomplete="off">
@@ -130,8 +135,8 @@
                                                 <select id="payType" name="payType" required autocomplete="off">
                                                     <option value="value">Select</option>
                                                     <option value="1">Cash</option>
-                                                    <option value="1">Check</option>
-                                                    <option value="1">Mobile Banking</option>
+                                                    <option value="2">Check</option>
+                                                    <option value="3">Mobile Banking</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -141,51 +146,59 @@
                                                 <input type="text" id="remarks" name="remarks" placeholder="Remarks" required autocomplete="off">
                                             </div>
                                         </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5><i class="fa fa-table bg-success"></i>Payment Details</h5>
-                            </div>
-                            <div class="card-body" style="height: 100%;">
-                                <div class="form-group row">
-                                    <label for="grossAmount" class="col-sm-5">Gross Amount</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="grossAmount" id="grossAmount" value="" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="discountAmount" class="col-sm-5">Discount Amount</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="discountAmount" id="discountAmount" value="" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="netAmount" class="col-sm-5">Net Amount</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="netAmount" id="netAmount" value="" class="bg-success text-white" readonly />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="vatAmount" class="col-sm-5">Vat Amount</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="vatAmount" id="vatAmount" value="" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-5">Grand Total</label>
-                                    <div class="col-sm-7">
-                                        <label id="grandTotal"></label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><i class="fa fa-table bg-success"></i>Payment Details</h5>
+                                </div>
+                                <div class="card-body" style="height: 100%;">
+                                    <div class="form-group row">
+                                        <label for="grossAmount" class="col-sm-5">Gross Amount</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="grossAmount" id="grossAmount" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="discountAmount" class="col-sm-5">Discount Amount</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="discountAmount" id="discountAmount" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="netAmount" class="col-sm-5">Net Amount</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="netAmount" id="netAmount" value="" class="bg-success text-white" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="vatAmount" class="col-sm-5">Vat Amount</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="vatAmount" id="vatAmount" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-5">Grand Total</label>
+                                        <div class="col-sm-7">
+                                            <label id="grandTotal"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 justify-content-end">
+                            <div class="card">
+                                <button type="submit" class="btn btn-success">Save Sale Bill</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div><!-- end card-->
         </div>
     </div>
@@ -260,8 +273,81 @@
             Common.Ajax('GET', '/MasterData/ProductInfo/AllProduct', [], 'json', ajaxGetAllProduct);
 
 
-
+            $(".numeric").keydown(function (e) {
+                //Allow: backspace, delete, tab, escape, enter, ctrl+A and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    return;
+                }
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
         })
+
+        function Clear() {
+            $("#productCode").val('');
+            $("#ProductId").val('');
+            $("#rate").val('');
+            $("#quantity").val('');
+        }
+
+        $("#tblAddProducts tbody").on('click', '.remove', function () {
+            $(this).closest('tr').remove();
+            findTotal();
+        })
+
+        let findTotal=()=> {
+            let totalBill = 0;
+            $("#tblAddProducts tbody tr").each(function () {
+                totalBill+=$(this).find("td").eq(3).text();
+            });
+
+            $("#tblAddProducts tfoot tr").find("td").eq(1).text(parseInt(totalBill))
+        }
+
+        let validationAddData = () => {
+
+            var response = true;
+            if ($("#productCode").val() === "undefined" || $("#productCode").val() === "") {
+                alert("ProductCode required");
+                response = false;
+                return response;
+            }
+          
+            if ($("#rate").val() === "undefined" || $("#rate").val() === "") {
+                alert("Rate field required");
+                response = false;
+                return response;
+            }
+            if ($("#quantity").val() === "undefined" || $("#quantity").val() === "") {
+                alert("Quantity field required");
+                response = false;
+                return response;
+            }
+            return response;
+        }
+
+        $("#btnAdd").click(function () {
+            let response = validationAddData();
+            let subTotal = 0;
+            subTotal = $("#rate").val() * $("#quantity").val();
+            if (response===true) {
+                $('#tblAddProducts tbody').prepend('<tr>' +
+                    '<td>' + $("#productCode").val() + '<span class="d-none">' + $("#ProductId").val() + '</span ></td>' +
+                    '<td>' + $("#rate").val() + '</td>' +
+                    '<td>' + $("#quantity").val() + '</td>' +
+                    '<td>' + subTotal + '</td>' +
+                    '<td><a class="btn btn-sm btn-danger remove">Delete</a></td>' +
+                    '</tr>');
+                findTotal();
+                Clear();
+            }
+        });
+
+
+
 
 
             let ajaxGetAllProduct = (response) => {
@@ -283,6 +369,8 @@
                         $("#productCode").val(ui.item.value);
                     }
                 });
+
+           
             }
 
         function CleanData() {
