@@ -67,5 +67,14 @@ namespace NayeemSaleApp.Areas.MasterData.Controllers
         {
             return Json(await _ProductService.DeleteById(Id));
         }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> AllProduct()
+        {
+            return Json(await _ProductService.GetAll());
+        }
+
     }
 }

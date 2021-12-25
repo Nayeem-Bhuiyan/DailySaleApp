@@ -134,19 +134,19 @@
         }
 
 
-        $("#customerName").keyup(function () {
+        $("#contactNumber").keyup(function () {
             CheckDuplicate();
         });
 
         function CheckDuplicate() {
 
-            var customer = $("#customerName").val().toLowerCase();
+            var customer = $("#contactNumber").val().toLowerCase();
             $('#tblData tbody tr').each(function () {
                 var customerInTable = $(this).find("td").eq(1).text().toLowerCase();
                 if ($.trim(customer) == $.trim(customerInTable)) {
                     $(this).find("td").eq(1).addClass("bg-warning");
                     swal.fire('warning', 'Sorry!! duplicate valu has found', 'warning');
-                    $("#customerName").val("");
+                    $("#contactNumber").val("");
                 }
                 else {
                     $(this).find("td").eq(1).removeClass("bg-warning");

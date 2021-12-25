@@ -133,19 +133,19 @@
         }
 
 
-        $("#productName").keyup(function () {
+        $("#productCode").keyup(function () {
             CheckDuplicate();
         });
 
         function CheckDuplicate() {
 
-            var customer = $("#productName").val().toLowerCase();
+            var customer = $("#productCode").val().toLowerCase();
             $('#tblData tbody tr').each(function () {
                 var customerInTable = $(this).find("td").eq(1).text().toLowerCase();
                 if ($.trim(customer) == $.trim(customerInTable)) {
                     $(this).find("td").eq(1).addClass("bg-warning");
                     swal.fire('warning', 'Sorry!! duplicate valu has found', 'warning');
-                    $("#productName").val("");
+                    $("#productCode").val("");
                 }
                 else {
                     $(this).find("td").eq(1).removeClass("bg-warning");
