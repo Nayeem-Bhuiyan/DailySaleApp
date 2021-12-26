@@ -377,7 +377,7 @@
 
         $('#btnSave').click(function (event) {
             event.preventDefault();
-
+            if ($("#tblAddProducts tbody tr").length > 0) {
             const code = uniqueBocherCode();
 
                 Swal.fire({
@@ -454,6 +454,11 @@
                         
                     }
                 });
+            }
+            else {
+                $('#btnSave').attr('disabled', 'disabled')
+                swal.fire('warning', 'Please Add at least one Item', 'warning');
+            }
         })
     </script>
 }
