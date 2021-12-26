@@ -392,7 +392,7 @@
                     if (result.isConfirmed) {
                         $('#tblAddProducts tbody tr').each(function () {
                             var CurrentRow = $(this);
-                            var frmSaleRecordData = {
+                            var SaleRecordData = {
                                 SaleRecordId :$('#SaleRecordId').val(),
                                 CustomerId:$('#CustomerId').val(),
                                 ProductId: $(this).find('td').eq(0).find('span').text(),
@@ -404,9 +404,9 @@
                            
                             console.log(frmSaleRecordData);
                                 $.ajax({
-                                    url: "/Sale/SaleRecordInfo/Index",
+                                    url: "/Sale/SaleRecordInfo/SaveSaleRecord",
                                     type: "POST",
-                                    data: JSON.stringify(frmSaleRecordData),
+                                    data: JSON.stringify(SaleRecordData),
                                     dataType: "json",
                                     contentType: "application/json; charset=utf-8",
                                     beforeSend: function () {
@@ -421,7 +421,7 @@
                                 })
                         });
 
-                            var frmPaymentRecordData = {
+                            var PaymentRecordData = {
                                 PaymentRecordId:$("#PaymentRecordId").val(),
                                 CustomerId: $("#CustomerId").val(),
                                 grossAmount: $("#grossAmount").val(),
@@ -435,7 +435,7 @@
                             $.ajax({
                                 url: "/Sale/SaleRecordInfo/SavePayment",
                                 type: "POST",
-                                data: JSON.stringify(frmPaymentRecordData),
+                                data: JSON.stringify(PaymentRecordData),
                                 dataType: "json",
                                 contentType: "application/json; charset=utf-8",
                                 beforeSend: function () {
