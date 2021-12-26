@@ -45,13 +45,11 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Index([FromBody] SaleRecordViewModel model)
         {
                 bool response = false;
                 SaleRecord SaleRecordObj = new SaleRecord
                 {
-                     Id = model.SaleRecordId,
                      ProductId =model.ProductId,
                      CustomerId =model.CustomerId,
                      rate =model.rate,
@@ -70,39 +68,42 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                  
                 }
 
-
-                    PaymentRecord PaymentObj = new PaymentRecord
-                    {
-                        Id = model.PaymentRecordId,
-                        CustomerId = model.CustomerId,
-                        grossAmount = model.grossAmount,
-                        discountAmount = model.discountAmount,
-                        vatAmount = model.vatAmount,
-                        receiveTotal = model.receiveTotal,
-                        payType = model.payType,
-                        remarks = model.remarks,
-                        createdAt = DateTime.Now
-                    };
-
-                    if (model.PaymentRecordId > 0)
-                    {
-                        response = await _PaymentRecordServic.Update(PaymentObj);
-                    }
-                    else
-                    {
-                        response = await _PaymentRecordServic.Insert(PaymentObj);
-                    }
-                
             return Json(response);
 
         }
 
 
-        //[HttpPost]
-        //public async Task<ActionResult> Delete(int? Id)
-        //{
-        //    return Json(await _ProductService.DeleteById(Id));
-        //}
 
+        [HttpPost]
+        public async Task<ActionResult> SavePayment([FromBody] SaleRecordViewModel model)
+        {
+            bool response = false;
+            
+            if (model.receiveTotal != null && model.grossAmount != null)
+            {
+                PaymentRecord PaymentObj = new PaymentRecord
+                {
+                    CustomerId = model.CustomerId,
+                    grossAmount = model.grossAmount,
+                    discountAmount = model.discountAmount,
+                    vatAmount = model.vatAmount,
+                    receiveTotal = model.receiveTotal,
+                    payType = model.payType,
+                    remarks = model.remarks,
+                    createdAt = DateTime.Now
+                };
+
+                if (model.PaymentRecordId > 0)
+                {
+                    response = await _PaymentRecordServic.Update(PaymentObj);
+                }
+                else
+                {
+                    response = await _PaymentRecordServic.Insert(PaymentObj);
+                }
+            }
+            return Json(response);
+
+        }
     }
 }
