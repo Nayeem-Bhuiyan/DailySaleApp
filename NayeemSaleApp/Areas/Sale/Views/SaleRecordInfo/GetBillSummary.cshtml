@@ -1,0 +1,83 @@
+﻿@model CustomerBillSummaryViewModel
+@{
+    ViewData["Title"] = "GetBillSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="breadcrumb-holder">
+            <h1 class="main-title float-left">Sale Summary Info</h1>
+            <ol class="breadcrumb float-right">
+                <li class="breadcrumb-item"><a href="/Home/Index"><i class="fa fa-home fa-2x"></i></a></li>
+                <li class="breadcrumb-item active"><a href="#">Bill Summary</a></li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3><i class="fa fa-free-code-camp bigfonts"></i>Sale Bill Summary</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped table-responsive-sm" id="tblData">
+                    <thead>
+                        <tr>
+                            <th>Sl#</th>
+                            <th>Customer</th>
+                            <th>Contact</th>
+                            <th>Total Bill</th>
+                            <th>Total Payment</th>
+                            <th>Total Due</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @if (Model?.customerBillSummaries != null)
+                            {
+
+                                int sl = 1;
+                                @foreach (var item in Model?.customerBillSummaries)
+                                {
+                                    <tr>
+                                        <td>@sl</td>
+                                        <td>@item?.customerName</td>
+                                        <td>@item?.contactNumber</td>
+                                        <td>@item?.grandTotal</td>
+                                        <td>@item?.totalReceive</td>
+                                        <td>@item?.totalDue</td>
+                                    </tr>
+                                    sl = sl + 1;
+                                }
+                            }
+
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4">No Data Has Found</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function() {
+            $("#tblData").DataTable();
+        })
+
+    </script>
+}

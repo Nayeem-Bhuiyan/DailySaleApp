@@ -143,5 +143,22 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
         }
 
+
+
+        [HttpGet]
+        public async Task<ActionResult> GetBillSummary()
+        {
+
+            CustomerBillSummaryViewModel data = new CustomerBillSummaryViewModel
+            {
+                customerBillSummaries = await _SaleRecordService.GetSellSummary()
+            };
+
+            return View(data);
+        }
+
+
+
+
     }
 }

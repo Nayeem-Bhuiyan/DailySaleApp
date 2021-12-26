@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using NayeemSaleApp.Areas.Sale.Models;
 using NayeemSaleApp.Data.Entity.SaleRecordEntity;
 using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
 using System;
@@ -69,6 +70,57 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
                 throw;
             }
         }
+
+        public async Task<IEnumerable<CustomerBillSummary>> GetSellSummary()
+        {
+            using (SqlConnection sql = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_GetSaleCustomerSummary", sql))
+                {
+                    try
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        var response = new List<CustomerBillSummary>();
+                        await sql.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                response.Add(MapToCustomerBillSummary(reader));
+                            }
+                        }
+
+                        return response;
+                    }
+                    catch (System.Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            }
+        }
+        private CustomerBillSummary MapToCustomerBillSummary(SqlDataReader reader)
+        {
+            try
+            {
+                return new CustomerBillSummary()
+                {
+                    CustomerId = Convert.ToInt32(reader["CustomerId"]),
+                    customerName = reader["customerName"].ToString(),
+                    contactNumber = reader["contactNumber"].ToString(),
+                    grandTotal = Convert.ToDecimal(reader["grandTotal"]),
+                    totalReceive = Convert.ToDecimal(reader["totalReceive"]),
+                    totalDue = Convert.ToDecimal(reader["totalDue"])
+                };
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
 
         public async Task<SaleRecord> GetById(int? Id)
         {

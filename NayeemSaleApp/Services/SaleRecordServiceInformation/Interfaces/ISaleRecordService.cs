@@ -1,4 +1,5 @@
-﻿using NayeemSaleApp.Data.Entity.SaleRecordEntity;
+﻿using NayeemSaleApp.Areas.Sale.Models;
+using NayeemSaleApp.Data.Entity.SaleRecordEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces
         Task<bool> Insert(SaleRecord model);
         Task<bool> Update(SaleRecord model);
         Task<bool> DeleteById(int? Id);
+        Task<IEnumerable<CustomerBillSummary>> GetSellSummary();
     }
 }
