@@ -379,7 +379,6 @@
             event.preventDefault();
             if ($("#tblAddProducts tbody tr").length > 0) {
             const code = uniqueBocherCode();
-
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You want to save this!",
@@ -451,7 +450,7 @@
                             }).fail(function () {
                                 $("#btnSave").removeAttr('disabled');
                             })
-                        
+                       
                     }
                 });
             }
