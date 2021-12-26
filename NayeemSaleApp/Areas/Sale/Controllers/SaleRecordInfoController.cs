@@ -43,18 +43,21 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
             }
 
         [HttpPost]
-        public async Task<ActionResult> SaveSaleRecord([FromBody] List<SaleRecordViewModel> modelList)
+        public async Task<ActionResult> SaveSaleRecord(SaleRecordModel model)
         {
+
+            int? saveCount=0;
             bool response = false;
-            foreach (var model in modelList)
+            foreach (var data in model.productList)
             {
-               
+
                 SaleRecord SaleRecordObj = new SaleRecord
                 {
-                    ProductId = model.ProductId,
+                    Id=model.SaleRecordId,
+                    ProductId = data.ProductId,
                     CustomerId = model.CustomerId,
-                    rate = model.rate,
-                    quantity = model.quantity,
+                    rate = data.rate,
+                    quantity = data.quantity,
                     billDate = model.billDate,
                     boucherNumber = model.boucherNumber,
                     createdAt = DateTime.Now
@@ -62,21 +65,31 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                 if (model.SaleRecordId > 0)
                 {
                     response = await _SaleRecordService.Update(SaleRecordObj);
+                    if (response)
+                    {
+                        saveCount += 1;
+                    }
                 }
                 else
                 {
                     response = await _SaleRecordService.Insert(SaleRecordObj);
+                    if (response)
+                    {
+                        saveCount += 1;
+                    }
 
                 }
+
             }
-            return Json(response);
+
+            return Json(saveCount);
 
         }
 
         [HttpPost]
         public async Task<ActionResult> SaveSale([FromBody] SaleRecordViewModel model)
         {
-            bool response = false;
+            
 
                 SaleRecord SaleRecordObj = new SaleRecord
                 {
@@ -90,15 +103,15 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                 };
                 if (model.SaleRecordId > 0)
                 {
-                    response = await _SaleRecordService.Update(SaleRecordObj);
+                     await _SaleRecordService.Update(SaleRecordObj);
                 }
                 else
                 {
-                    response = await _SaleRecordService.Insert(SaleRecordObj);
+                     await _SaleRecordService.Insert(SaleRecordObj);
 
                 }
             
-            return Json(response);
+            return Json(model);
 
         }
 

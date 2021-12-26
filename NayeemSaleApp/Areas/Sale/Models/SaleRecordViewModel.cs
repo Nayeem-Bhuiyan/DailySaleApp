@@ -8,6 +8,8 @@ namespace NayeemSaleApp.Areas.Sale.Models
 {
     public class SaleRecordViewModel
     {
+       
+        
            //SaleCord
         public int SaleRecordId { get; set; }
         public int ProductId { get; set; }
@@ -32,5 +34,30 @@ namespace NayeemSaleApp.Areas.Sale.Models
 
         public IEnumerable<Product> products { get; set; }
         public IEnumerable<Customer> customers { get; set; }
+
+        public List<ProductList> productList { get; set; }
+    }
+
+
+    public class SaleRecordModel
+    {
+        public SaleRecordModel()
+        {
+            productList = new List<ProductList>();
+        }
+
+        public int? quantity { get; set; }
+        public DateTime? billDate { get; set; }
+        public int CustomerId { get; set; }
+        public string boucherNumber { get; set; }
+        public int SaleRecordId { get; set; }
+        public List<ProductList> productList { get; set; }
+    }
+    public class ProductList
+    {
+        //SaleCord
+        public int ProductId { get; set; }
+        public float? rate { get; set; }
+        public int? quantity { get; set; }
     }
 }

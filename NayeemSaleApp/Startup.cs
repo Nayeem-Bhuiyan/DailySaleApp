@@ -26,6 +26,7 @@ using NayeemSaleApp.Services.SaleRecordServiceInformation.Interfaces;
 using NayeemSaleApp.Services.SaleRecordServiceInformation;
 using NayeemSaleApp.Services.PaymentRecordServiceInformation.Interfaces;
 using NayeemSaleApp.Services.PaymentRecordServiceInformation;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace NayeemSaleApp
 {
@@ -48,6 +49,15 @@ namespace NayeemSaleApp
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueCountLimit = int.MaxValue;
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartHeadersLengthLimit = int.MaxValue;
             });
 
             services.AddSession(options =>
@@ -158,6 +168,7 @@ namespace NayeemSaleApp
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
+                options.MaxModelBindingCollectionSize = 100000;
             });
 
             services.Configure<IISServerOptions>(options =>

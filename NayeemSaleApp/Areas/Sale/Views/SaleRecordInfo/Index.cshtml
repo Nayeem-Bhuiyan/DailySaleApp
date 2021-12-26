@@ -378,7 +378,6 @@
         $('#btnSave').click(function (event) {
             event.preventDefault();
             if ($("#tblAddProducts tbody tr").length > 0) {
-                const code = uniqueBocherCode();
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You want to save this!",
@@ -397,13 +396,9 @@
                         
 
                             var SaleRecordData = {
-                                SaleRecordId: $('#SaleRecordId').val(),
-                                CustomerId: $('#CustomerId').val(),
                                 ProductId: $(this).find('td').eq(0).find('span').text().trim(),
                                 rate: $(this).find('td').eq(1).text().trim(),
                                 quantity: $(this).find('td').eq(2).text().trim(),
-                                billDate: $('#billDate').val(),
-                                boucherNumber: code
                             }
                            
                             AllAddedData.push(SaleRecordData);
@@ -411,14 +406,21 @@
                             
                         });
                         console.log(AllAddedData);
-                        var saleDataList = JSON.stringify(AllAddedData);
+                        var model = {
+                            SaleRecordId: $('#SaleRecordId').val(),
+                            CustomerId: $('#CustomerId').val(),
+                            boucherNumber: uniqueBocherCode(),
+                            billDate: $('#billDate').val(),
+                            productList: AllAddedData
+                        };
+
                         var response = false;
                         $.ajax({
                             url: "/Sale/SaleRecordInfo/SaveSaleRecord",
                             type: "POST",
-                            data:saleDataList,
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
+                            data: model,
+                           /* dataType: "json",*/
+                           /* contentType: "application/json; charset=utf-8",*/
                             beforeSend: function () {
                                 $('#btnSave').attr('disabled', 'disabled');
                                 $('#btnSave').val('Submitting...');
