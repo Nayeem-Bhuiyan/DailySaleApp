@@ -414,25 +414,25 @@
                             productList: AllAddedData
                         };
 
-                        var response = false;
+                        var response =false;
                         $.ajax({
                             url: "/Sale/SaleRecordInfo/SaveSaleRecord",
                             type: "POST",
                             data: model,
                            /* dataType: "json",*/
                            /* contentType: "application/json; charset=utf-8",*/
-                            beforeSend: function () {
-                                $('#btnSave').attr('disabled', 'disabled');
-                                $('#btnSave').val('Submitting...');
-                            },
+                            //beforeSend: function () {
+                            //    $('#btnSave').attr('disabled', 'disabled');
+                            //    $('#btnSave').val('Submitting...');
+                            //},
                         }).done(function (data) {
                             response = true;
                             console.log(data);
                         }).fail(function () {
-                            $("#btnSave").removeAttr('disabled');
+                            console.log("sale error");
                         })
 
-                        if (response) {
+                    /*    if (response) {*/
                             var PaymentRecordData = {
                                 PaymentRecordId: $("#PaymentRecordId").val(),
                                 CustomerId: $("#CustomerId").val(),
@@ -444,14 +444,15 @@
                                 remarks: $("#remarks").val(),
                             }
                             console.log(PaymentRecordData);
-
-                            var payData = JSON.stringify(PaymentRecordData)
+                            var payRecord = { payment: PaymentRecordData };
+                            var payData = JSON.stringify(payRecord)
                             $.ajax({
                                 url: "/Sale/SaleRecordInfo/SavePayment",
                                 type: "POST",
+                                data: payRecord,
                                 data: payData,
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
+                                //dataType: "json",
+                                //contentType: "application/json; charset=utf-8",
                                 beforeSend: function () {
                                     $('#btnSave').attr('disabled', 'disabled');
                                     $('#btnSave').val('Submitting...');
@@ -463,7 +464,7 @@
                             }).fail(function () {
                                 $("#btnSave").removeAttr('disabled');
                             })
-                        }
+                      /*  }*/
                        
 
                     }

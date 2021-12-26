@@ -117,34 +117,40 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> SavePayment([FromBody] SaleRecordViewModel model)
+        public async Task<ActionResult> SavePayment([FromBody] SaleRecordModel model)
         {
             bool response = false;
-            
-            if (model.receiveTotal != null && model.grossAmount != null && model.boucherNumber!=null)
-            {
+            var msg = "Payment Error";
                 PaymentRecord PaymentObj = new PaymentRecord
                 {
                     CustomerId = model.CustomerId,
-                    grossAmount = model.grossAmount,
-                    discountAmount = model.discountAmount,
-                    vatAmount = model.vatAmount,
-                    receiveTotal = model.receiveTotal,
-                    payType = model.payType,
-                    remarks = model.remarks,
+                    grossAmount = model.payment?.grossAmount,
+                    discountAmount = model.payment?.discountAmount,
+                    vatAmount = model.payment?.vatAmount,
+                    receiveTotal = model.payment?.receiveTotal,
+                    payType = model.payment?.payType,
+                    remarks = model.payment?.remarks,
                     createdAt = DateTime.Now
                 };
 
-                if (model.PaymentRecordId > 0)
+                if (model.payment?.PaymentRecordId > 0)
                 {
                     response = await _PaymentRecordServic.Update(PaymentObj);
+                if (response)
+                {
+                    msg = "Payment Success";
+                }
                 }
                 else
                 {
                     response = await _PaymentRecordServic.Insert(PaymentObj);
+                if (response)
+                {
+                    msg = "Payment Success";
                 }
             }
-            return Json(response);
+            
+            return Json(msg);
 
         }
     }

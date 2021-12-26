@@ -52,6 +52,8 @@ namespace NayeemSaleApp.Areas.Sale.Models
         public string boucherNumber { get; set; }
         public int SaleRecordId { get; set; }
         public List<ProductList> productList { get; set; }
+        public Payment payment { get; set; }
+
     }
     public class ProductList
     {
@@ -59,5 +61,16 @@ namespace NayeemSaleApp.Areas.Sale.Models
         public int ProductId { get; set; }
         public float? rate { get; set; }
         public int? quantity { get; set; }
+    }
+
+    public class Payment
+    {
+        public int PaymentRecordId { get; set; }
+        public float? grossAmount { get; set; }
+        public float? discountAmount { get; set; }
+        public float? vatAmount { get; set; }
+        public float? receiveTotal { get; set; }
+        public int? payType { get; set; }
+        public string remarks { get; set; }
     }
 }
