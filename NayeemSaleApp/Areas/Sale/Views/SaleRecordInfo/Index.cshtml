@@ -44,7 +44,6 @@
             <div class="card-body">
                     <input type="hidden" name="SaleRecordId" id="SaleRecordId" value="0" />
                     <input type="hidden" name="PaymentRecordId" id="PaymentRecordId" value="0" />
-                    <span id="uniCode"></span>
                     <div class="form-group row">
                         <label for="CustomerId" class="col-sm-2 col-form-label">Customer</label>
                         <div class="col-sm-4">
@@ -208,9 +207,6 @@
     <script src="~/lib/jquery-ui/js/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
-
-            $("#uniCode").text(uniqueBocherCode());
-
             $("#tblData").DataTable({order: [[0, "desc"]]});
             $('#CustomerId').select2();
             var d = new Date();
@@ -434,7 +430,7 @@
                         }).done(function (data) {
                             console.log(data);
                             $("#btnSave").removeAttr('disabled');
-                            swal.fire('success', 'Saved All Successfully!', 'success');
+                            swal.fire('success', 'Saved ' + data.saleSuccessCount+'items Successfully!', 'success');
                         }).fail(function () {
                             $("#btnSave").removeAttr('disabled');
                             console.log("Error");
