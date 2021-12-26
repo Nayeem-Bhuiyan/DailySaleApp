@@ -46,8 +46,22 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
         public async Task<ActionResult> SaveSaleRecord(SaleRecordModel model)
         {
 
+            ResponseMessage resModel = new ResponseMessage();
+
             int? saveCount=0;
             bool response = false;
+            PaymentRecord PaymentObj = new PaymentRecord
+            {
+                CustomerId = model.CustomerId,
+                grossAmount = model.grossAmount,
+                discountAmount = model.discountAmount,
+                vatAmount = model.vatAmount,
+                receiveTotal = model.receiveTotal,
+                remarks = model.remarks,
+                payType=model.payType,
+                createdAt = DateTime.Now
+            };
+
             foreach (var data in model.productList)
             {
 
@@ -65,55 +79,70 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                 if (model.SaleRecordId > 0)
                 {
                     response = await _SaleRecordService.Update(SaleRecordObj);
+
+
                     if (response)
                     {
                         saveCount += 1;
+                        resModel.saleResponse = "Succesfully Updated SaleInfo";
+                        resModel.saleSuccessCount = saveCount;
+                    }
+                    else
+                    {
+                        resModel.saleResponse = "Error in Update SaleInfo";
                     }
                 }
                 else
                 {
                     response = await _SaleRecordService.Insert(SaleRecordObj);
+                   
                     if (response)
                     {
                         saveCount += 1;
+                        resModel.saleResponse = "Succesfully Save SaleInfo";
+                        resModel.saleSuccessCount = saveCount;
+                    }
+                    else
+                    {
+                        resModel.saleResponse = "Error in Save SaleInfo";
                     }
 
                 }
 
             }
 
-            return Json(saveCount);
+            bool res = false;
 
-        }
 
-        [HttpPost]
-        public async Task<ActionResult> SaveSale([FromBody] SaleRecordViewModel model)
-        {
-            
-
-                SaleRecord SaleRecordObj = new SaleRecord
+            if (model.PaymentRecordId > 0)
+            {
+                res = await _PaymentRecordServic.Update(PaymentObj);
+                if (res)
                 {
-                    ProductId = model.ProductId,
-                    CustomerId = model.CustomerId,
-                    rate = model.rate,
-                    quantity = model.quantity,
-                    billDate = model.billDate,
-                    boucherNumber = model.boucherNumber,
-                    createdAt = DateTime.Now
-                };
-                if (model.SaleRecordId > 0)
-                {
-                     await _SaleRecordService.Update(SaleRecordObj);
+                    resModel.payResponse = "Succesfully Updated Payment";
                 }
                 else
                 {
-                     await _SaleRecordService.Insert(SaleRecordObj);
-
+                    resModel.payResponse = "Error in Update Payment";
                 }
-            
-            return Json(model);
+            }
+            else
+            {
+                res = await _PaymentRecordServic.Insert(PaymentObj);
+                if (res)
+                {
+                    resModel.payResponse = "Succesfully Save Payment";
+                }
+                else
+                {
+                    resModel.payResponse = "Error in Save Payment";
+                }
+            }
+
+            return Json(resModel);
 
         }
+
 
 
         [HttpPost]
@@ -128,7 +157,6 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                     discountAmount = model.payment?.discountAmount,
                     vatAmount = model.payment?.vatAmount,
                     receiveTotal = model.payment?.receiveTotal,
-                    payType = model.payment?.payType,
                     remarks = model.payment?.remarks,
                     createdAt = DateTime.Now
                 };
@@ -153,5 +181,44 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
             return Json(msg);
 
         }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> SaveSale([FromBody] SaleRecordViewModel model)
+        {
+
+
+            SaleRecord SaleRecordObj = new SaleRecord
+            {
+                ProductId = model.ProductId,
+                CustomerId = model.CustomerId,
+                rate = model.rate,
+                quantity = model.quantity,
+                billDate = model.billDate,
+                boucherNumber = model.boucherNumber,
+                createdAt = DateTime.Now
+            };
+
+
+
+
+            if (model.SaleRecordId > 0)
+            {
+                await _SaleRecordService.Update(SaleRecordObj);
+            }
+            else
+            {
+                await _SaleRecordService.Insert(SaleRecordObj);
+
+            }
+
+
+            return Json(model);
+
+        }
+
+
+
     }
 }
