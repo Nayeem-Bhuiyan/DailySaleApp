@@ -97,6 +97,7 @@
                                     <table class="table table-bordered table-striped table-responsive-sm" id="tblAddProducts">
                                         <thead>
                                             <tr>
+                                                <th>sl</th>
                                                 <th>Code</th>
                                                 <th>Rate</th>
                                                 <th>Quantity</th>
@@ -108,7 +109,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="3" class="text-right">Total</td>
+                                                <td colspan="4" class="text-right">Total</td>
                                                 <td colspan="2"></td>
                                             </tr>
                                         </tfoot>
@@ -252,12 +253,33 @@
             $("#quantity").val('');
         }
 
-        let clearPayment = () => {
+        let AllClear=() => {
             $("#grossAmount").val(0);
             $("#netAmount").val('');
             $("#vatAmount").val('');
             $("#discountAmount").val('');
+            $("#changeAmount").val("");
+            $("#grandTotal").text('');
+            $("#payType").val('');
+            $("#remarks").val('');
+            $("#grandTotal").text('');
+            $("#productCode").val('');
+            $("#ProductId").val('');
+            $("#rate").val('');
+            $("#quantity").val('');
         }
+
+
+        $("#rate").keyup(function() {
+            if ($("#ProductId").val() == 'undefined' || $("#ProductId").val() == "" && $("#productCode").val()!="") {
+                alert("Invalid Product Code");
+                return false;
+            }
+            if ($("#productCode").val() === "") {
+                $("#ProductId").val('');
+                return false;
+            }
+        })
 
         $("#discountAmount").keyup(function() {
             if ($("#grossAmount").val() !== 'undefinded' && $(this).val() !== 'undefinded' && $(this).val()!=="") {
@@ -296,6 +318,7 @@
         })
 
 
+
         $("#tblAddProducts tbody").on('click', '.remove', function () {
             $(this).closest('tr').remove();
             findTotal();
@@ -309,7 +332,7 @@
 
             $("#tblAddProducts tfoot tr").find("td").eq(1).text(parseInt(totalBill))
             $("#grossAmount").val(parseInt(totalBill));
-            $("#grandTotal").text($("#grossAmount").val());;
+            $("#grandTotal").text($("#grossAmount").val());
         }
 
         let validationAddData = () => {
@@ -337,9 +360,11 @@
         $("#btnAdd").click(function () {
             let response = validationAddData();
             let subTotal = 0;
+            var rowNum = $('#tblAddProducts tbody tr').length+1;
             subTotal = $("#rate").val() * $("#quantity").val();
             if (response===true) {
-                $('#tblAddProducts tbody').prepend('<tr>' +
+                $('#tblAddProducts tbody').append('<tr>' +
+                    '<td>' + rowNum+'</td>'+
                     '<td>' + $("#productCode").val() + '<span class="d-none">' + $("#ProductId").val() + '</span ></td>' +
                     '<td>' + $("#rate").val() + '</td>' +
                     '<td>' + $("#quantity").val() + '</td>' +
@@ -392,9 +417,9 @@
                         
 
                             var SaleRecordData = {
-                                ProductId: $(this).find('td').eq(0).find('span').text().trim(),
-                                rate: $(this).find('td').eq(1).text().trim(),
-                                quantity: $(this).find('td').eq(2).text().trim(),
+                                ProductId: $(this).find('td').eq(1).find('span').text().trim(),
+                                rate: $(this).find('td').eq(2).text().trim(),
+                                quantity: $(this).find('td').eq(3).text().trim(),
                             }
                            
                             AllAddedData.push(SaleRecordData);
@@ -430,10 +455,12 @@
                         }).done(function (data) {
                             console.log(data);
                             $("#btnSave").removeAttr('disabled');
-                            swal.fire('success', 'Saved ' + data.saleSuccessCount+'items Successfully!', 'success');
+                            swal.fire('success', 'Saved ' + data.saleSuccessCount + 'items Successfully!', 'success');
+                            AllClear();
                         }).fail(function () {
                             $("#btnSave").removeAttr('disabled');
                             console.log("Error");
+                            Clear();
                         })
 
                        
