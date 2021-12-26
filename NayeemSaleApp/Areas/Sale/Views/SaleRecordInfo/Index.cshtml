@@ -390,8 +390,12 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var AllAddedData = [];
+
                         $('#tblAddProducts tbody tr').each(function () {
+                            
                             var CurrentRow = $(this);
+                        
+
                             var SaleRecordData = {
                                 SaleRecordId: $('#SaleRecordId').val(),
                                 CustomerId: $('#CustomerId').val(),
@@ -404,10 +408,11 @@
                            
                             AllAddedData.push(SaleRecordData);
                             CurrentRow.remove();
+                            
                         });
                         console.log(AllAddedData);
                         var saleDataList = JSON.stringify(AllAddedData);
-                        
+                        var response = false;
                         $.ajax({
                             url: "/Sale/SaleRecordInfo/SaveSaleRecord",
                             type: "POST",
@@ -419,42 +424,45 @@
                                 $('#btnSave').val('Submitting...');
                             },
                         }).done(function (data) {
+                            response = true;
                             console.log(data);
                         }).fail(function () {
                             $("#btnSave").removeAttr('disabled');
                         })
 
-                        var PaymentRecordData = {
-                            PaymentRecordId: $("#PaymentRecordId").val(),
-                            CustomerId: $("#CustomerId").val(),
-                            grossAmount: $("#grossAmount").val(),
-                            discountAmount: $("#discountAmount").val(),
-                            vatAmount: $("#vatAmount").val(),
-                            receiveTotal: $("#receiveTotal").val(),
-                            payType: $("#payType").val(),
-                            remarks: $("#remarks").val(),
-                        }
-                        console.log(PaymentRecordData);
-                       var payData= JSON.stringify(PaymentRecordData)
-                        $.ajax({
-                            url: "/Sale/SaleRecordInfo/SavePayment",
-                            type: "POST",
-                            data: payData,
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            beforeSend: function () {
-                                $('#btnSave').attr('disabled', 'disabled');
-                                $('#btnSave').val('Submitting...');
-                            },
-                        }).done(function (data) {
-                            if ($('#tblAddProducts tbody tr').length == 0) {
-                                $("#btnSave").removeAttr('disabled');
-                                console.log(data);
-                                swal.fire('success', 'Saved All Successfully!', 'success');
+                        if (response) {
+                            var PaymentRecordData = {
+                                PaymentRecordId: $("#PaymentRecordId").val(),
+                                CustomerId: $("#CustomerId").val(),
+                                grossAmount: $("#grossAmount").val(),
+                                discountAmount: $("#discountAmount").val(),
+                                vatAmount: $("#vatAmount").val(),
+                                receiveTotal: $("#receiveTotal").val(),
+                                payType: $("#payType").val(),
+                                remarks: $("#remarks").val(),
                             }
-                        }).fail(function () {
-                            $("#btnSave").removeAttr('disabled');
-                        })
+                            console.log(PaymentRecordData);
+
+                            var payData = JSON.stringify(PaymentRecordData)
+                            $.ajax({
+                                url: "/Sale/SaleRecordInfo/SavePayment",
+                                type: "POST",
+                                data: payData,
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                beforeSend: function () {
+                                    $('#btnSave').attr('disabled', 'disabled');
+                                    $('#btnSave').val('Submitting...');
+                                },
+                            }).done(function (data) {
+                                    $("#btnSave").removeAttr('disabled');
+                                    console.log(data);
+                                    swal.fire('success', 'Saved All Successfully!', 'success');
+                            }).fail(function () {
+                                $("#btnSave").removeAttr('disabled');
+                            })
+                        }
+                       
 
                     }
                 });
