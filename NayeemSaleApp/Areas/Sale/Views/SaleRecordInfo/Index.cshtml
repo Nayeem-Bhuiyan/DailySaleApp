@@ -378,7 +378,7 @@
         $('#btnSave').click(function (event) {
             event.preventDefault();
             if ($("#tblAddProducts tbody tr").length > 0) {
-            const code = uniqueBocherCode();
+                const code = uniqueBocherCode();
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You want to save this!",
@@ -389,11 +389,12 @@
                     confirmButtonText: 'Yes, save it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        var AllAddedData = [];
                         $('#tblAddProducts tbody tr').each(function () {
                             var CurrentRow = $(this);
                             var SaleRecordData = {
-                                SaleRecordId :$('#SaleRecordId').val(),
-                                CustomerId:$('#CustomerId').val(),
+                                SaleRecordId: $('#SaleRecordId').val(),
+                                CustomerId: $('#CustomerId').val(),
                                 ProductId: $(this).find('td').eq(0).find('span').text().trim(),
                                 rate: $(this).find('td').eq(1).text().trim(),
                                 quantity: $(this).find('td').eq(2).text().trim(),
@@ -401,56 +402,60 @@
                                 boucherNumber: code
                             }
                            
-                            console.log(SaleRecordData);
-                                $.ajax({
-                                    url: "/Sale/SaleRecordInfo/SaveSaleRecord",
-                                    type: "POST",
-                                    data: JSON.stringify(SaleRecordData),
-                                    dataType: "json",
-                                    contentType: "application/json; charset=utf-8",
-                                    beforeSend: function () {
-                                        $('#btnSave').attr('disabled', 'disabled');
-                                        $('#btnSave').val('Submitting...');
-                                    },
-                                }).done(function (data) {
-                                    CurrentRow.remove();
-                                    console.log(data);
-                                }).fail(function () {
-                                    $("#btnSave").removeAttr('disabled');
-                                })
+                            AllAddedData.push(SaleRecordData);
+                            CurrentRow.remove();
                         });
+                        console.log(AllAddedData);
+                        var saleDataList = JSON.stringify(AllAddedData);
+                        
+                        $.ajax({
+                            url: "/Sale/SaleRecordInfo/SaveSaleRecord",
+                            type: "POST",
+                            data:saleDataList,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            beforeSend: function () {
+                                $('#btnSave').attr('disabled', 'disabled');
+                                $('#btnSave').val('Submitting...');
+                            },
+                        }).done(function (data) {
+                            console.log(data);
+                        }).fail(function () {
+                            $("#btnSave").removeAttr('disabled');
+                        })
 
-                            var PaymentRecordData = {
-                                PaymentRecordId:$("#PaymentRecordId").val(),
-                                CustomerId: $("#CustomerId").val(),
-                                grossAmount: $("#grossAmount").val(),
-                                discountAmount: $("#discountAmount").val(),
-                                vatAmount: $("#vatAmount").val(),
-                                receiveTotal: $("#receiveTotal").val(),
-                                payType: $("#payType").val(),
-                                remarks: $("#remarks").val(),
-                            }
+                        var PaymentRecordData = {
+                            PaymentRecordId: $("#PaymentRecordId").val(),
+                            CustomerId: $("#CustomerId").val(),
+                            grossAmount: $("#grossAmount").val(),
+                            discountAmount: $("#discountAmount").val(),
+                            vatAmount: $("#vatAmount").val(),
+                            receiveTotal: $("#receiveTotal").val(),
+                            payType: $("#payType").val(),
+                            remarks: $("#remarks").val(),
+                        }
                         console.log(PaymentRecordData);
-                            $.ajax({
-                                url: "/Sale/SaleRecordInfo/SavePayment",
-                                type: "POST",
-                                data: JSON.stringify(PaymentRecordData),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                beforeSend: function () {
-                                    $('#btnSave').attr('disabled', 'disabled');
-                                    $('#btnSave').val('Submitting...');
-                                },
-                            }).done(function (data) {
-                                if ($('#tblAddProducts tbody tr').length == 0) {
-                                    $("#btnSave").removeAttr('disabled');
-                                    console.log(data);
-                                    swal.fire('success', 'Saved All Successfully!', 'success');
-                                }
-                            }).fail(function () {
+                       var payData= JSON.stringify(PaymentRecordData)
+                        $.ajax({
+                            url: "/Sale/SaleRecordInfo/SavePayment",
+                            type: "POST",
+                            data: payData,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            beforeSend: function () {
+                                $('#btnSave').attr('disabled', 'disabled');
+                                $('#btnSave').val('Submitting...');
+                            },
+                        }).done(function (data) {
+                            if ($('#tblAddProducts tbody tr').length == 0) {
                                 $("#btnSave").removeAttr('disabled');
-                            })
-                       
+                                console.log(data);
+                                swal.fire('success', 'Saved All Successfully!', 'success');
+                            }
+                        }).fail(function () {
+                            $("#btnSave").removeAttr('disabled');
+                        })
+
                     }
                 });
             }
@@ -459,6 +464,91 @@
                 swal.fire('warning', 'Please Add at least one Item', 'warning');
             }
         })
+
+        //$('#btnSave').click(function (event) {
+        //    event.preventDefault();
+        //    if ($("#tblAddProducts tbody tr").length > 0) {
+        //    const code = uniqueBocherCode();
+        //        Swal.fire({
+        //            title: 'Are you sure?',
+        //            text: "You want to save this!",
+        //            icon: 'warning',
+        //            showCancelButton: true,
+        //            confirmButtonColor: '#3085d6',
+        //            cancelButtonColor: '#d33',
+        //            confirmButtonText: 'Yes, save it!'
+        //        }).then((result) => {
+        //            if (result.isConfirmed) {
+        //                $('#tblAddProducts tbody tr').each(function () {
+        //                    var CurrentRow = $(this);
+        //                    var SaleRecordData = {
+        //                        SaleRecordId :$('#SaleRecordId').val(),
+        //                        CustomerId:$('#CustomerId').val(),
+        //                        ProductId: $(this).find('td').eq(0).find('span').text().trim(),
+        //                        rate: $(this).find('td').eq(1).text().trim(),
+        //                        quantity: $(this).find('td').eq(2).text().trim(),
+        //                        billDate: $('#billDate').val(),
+        //                        boucherNumber: code
+        //                    }
+                           
+        //                    console.log(SaleRecordData);
+        //                        $.ajax({
+        //                            url: "/Sale/SaleRecordInfo/SaveSaleRecord",
+        //                            type: "POST",
+        //                            data: JSON.stringify(SaleRecordData),
+        //                            dataType: "json",
+        //                            contentType: "application/json; charset=utf-8",
+        //                            beforeSend: function () {
+        //                                $('#btnSave').attr('disabled', 'disabled');
+        //                                $('#btnSave').val('Submitting...');
+        //                            },
+        //                        }).done(function (data) {
+        //                            CurrentRow.remove();
+        //                            console.log(data);
+        //                        }).fail(function () {
+        //                            $("#btnSave").removeAttr('disabled');
+        //                        })
+        //                });
+
+        //                    var PaymentRecordData = {
+        //                        PaymentRecordId:$("#PaymentRecordId").val(),
+        //                        CustomerId: $("#CustomerId").val(),
+        //                        grossAmount: $("#grossAmount").val(),
+        //                        discountAmount: $("#discountAmount").val(),
+        //                        vatAmount: $("#vatAmount").val(),
+        //                        receiveTotal: $("#receiveTotal").val(),
+        //                        payType: $("#payType").val(),
+        //                        remarks: $("#remarks").val(),
+        //                    }
+        //                console.log(PaymentRecordData);
+        //                    $.ajax({
+        //                        url: "/Sale/SaleRecordInfo/SavePayment",
+        //                        type: "POST",
+        //                        data: JSON.stringify(PaymentRecordData),
+        //                        dataType: "json",
+        //                        contentType: "application/json; charset=utf-8",
+        //                        beforeSend: function () {
+        //                            $('#btnSave').attr('disabled', 'disabled');
+        //                            $('#btnSave').val('Submitting...');
+        //                        },
+        //                    }).done(function (data) {
+        //                        if ($('#tblAddProducts tbody tr').length == 0) {
+        //                            $("#btnSave").removeAttr('disabled');
+        //                            console.log(data);
+        //                            swal.fire('success', 'Saved All Successfully!', 'success');
+        //                        }
+        //                    }).fail(function () {
+        //                        $("#btnSave").removeAttr('disabled');
+        //                    })
+                       
+        //            }
+        //        });
+        //    }
+        //    else {
+        //        $('#btnSave').attr('disabled', 'disabled')
+        //        swal.fire('warning', 'Please Add at least one Item', 'warning');
+        //    }
+        //})
     </script>
 }
 
