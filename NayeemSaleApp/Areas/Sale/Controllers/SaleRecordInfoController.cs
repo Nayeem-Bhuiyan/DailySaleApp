@@ -31,7 +31,7 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpGet]
-            public async Task<ActionResult<IEnumerable<SaleRecordViewModel>>> Index()
+            public async Task<ActionResult> Index()
             {
                SaleRecordViewModel vmModel = new SaleRecordViewModel()
                 {
