@@ -402,7 +402,7 @@
                                 boucherNumber: code
                             }
                            
-                            console.log(frmSaleRecordData);
+                            console.log(SaleRecordData);
                                 $.ajax({
                                     url: "/Sale/SaleRecordInfo/SaveSaleRecord",
                                     type: "POST",
@@ -431,7 +431,7 @@
                                 payType: $("#payType").val(),
                                 remarks: $("#remarks").val(),
                             }
-                        console.log(frmPaymentRecordData);
+                        console.log(PaymentRecordData);
                             $.ajax({
                                 url: "/Sale/SaleRecordInfo/SavePayment",
                                 type: "POST",
