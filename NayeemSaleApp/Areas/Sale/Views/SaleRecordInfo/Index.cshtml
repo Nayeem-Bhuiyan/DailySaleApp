@@ -49,7 +49,7 @@
                         <label for="CustomerId" class="col-sm-2 col-form-label">Customer</label>
                         <div class="col-sm-4">
                             <select id="CustomerId" name="CustomerId">
-                                <option value="value">Select</option>
+                                <option value="0">Select</option>
                                 @foreach (var customer in Model.customers)
                                 {
                                     <option value="@customer.Id">@customer.customerName</option>
