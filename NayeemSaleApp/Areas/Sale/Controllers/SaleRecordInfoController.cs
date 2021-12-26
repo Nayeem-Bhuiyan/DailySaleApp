@@ -42,38 +42,6 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
                 return View(vmModel);
             }
 
-
-
-        [HttpPost]
-        public async Task<ActionResult> Index([FromBody]SaleRecordViewModel model)
-        {
-                bool response = false;
-                SaleRecord SaleRecordObj = new SaleRecord
-                {
-                    ProductId = model.ProductId,
-                    CustomerId = model.CustomerId,
-                    rate = model.rate,
-                    quantity = model.quantity,
-                    billDate =model.billDate,
-                    boucherNumber = model.boucherNumber,
-                    createdAt=DateTime.Now
-                };
-                if (model.SaleRecordId>0)
-                {
-                    response=await _SaleRecordService.Update(SaleRecordObj);
-                }
-                else
-                {
-                    response=await _SaleRecordService.Insert(SaleRecordObj);
-                 
-                }
-
-            return Json(response);
-
-        }
-
-
-
         [HttpPost]
         public async Task<ActionResult> SaveSaleRecord([FromBody] SaleRecordViewModel model)
         {

@@ -394,9 +394,9 @@
                             var SaleRecordData = {
                                 SaleRecordId :$('#SaleRecordId').val(),
                                 CustomerId:$('#CustomerId').val(),
-                                ProductId: $(this).find('td').eq(0).find('span').text(),
-                                rate:$(this).find('td').eq(1).text(),
-                                quantity:$(this).find('td').eq(2).text(),
+                                ProductId: $(this).find('td').eq(0).find('span').text().trim(),
+                                rate: $(this).find('td').eq(1).text().trim(),
+                                quantity: $(this).find('td').eq(2).text().trim(),
                                 billDate: $('#billDate').val(),
                                 boucherNumber: code
                             }
