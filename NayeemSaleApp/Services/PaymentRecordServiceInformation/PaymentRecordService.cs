@@ -120,6 +120,7 @@ namespace NayeemSaleApp.Services.PaymentRecordServiceInformation
                         cmd.Parameters.Add(new SqlParameter("@CustomerId", model.CustomerId));
                         cmd.Parameters.Add(new SqlParameter("@payType", model.payType));
                         cmd.Parameters.Add(new SqlParameter("@remarks", model.remarks));
+                        cmd.Parameters.Add(new SqlParameter("@createdAt", DateTime.Now));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;
@@ -151,6 +152,7 @@ namespace NayeemSaleApp.Services.PaymentRecordServiceInformation
                         cmd.Parameters.Add(new SqlParameter("@CustomerId", model.CustomerId));
                         cmd.Parameters.Add(new SqlParameter("@payType", model.payType));
                         cmd.Parameters.Add(new SqlParameter("@remarks", model.remarks));
+                        cmd.Parameters.Add(new SqlParameter("@createdAt", DateTime.Now));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;

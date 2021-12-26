@@ -117,6 +117,7 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
                         cmd.Parameters.Add(new SqlParameter("@quantity", model.quantity));
                         cmd.Parameters.Add(new SqlParameter("@billDate", model.billDate));
                         cmd.Parameters.Add(new SqlParameter("@boucherNumber", model.boucherNumber));
+                        cmd.Parameters.Add(new SqlParameter("@createdAt", DateTime.Now));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;
@@ -146,6 +147,7 @@ namespace NayeemSaleApp.Services.SaleRecordServiceInformation
                         cmd.Parameters.Add(new SqlParameter("@quantity", model.quantity));
                         cmd.Parameters.Add(new SqlParameter("@billDate", model.billDate));
                         cmd.Parameters.Add(new SqlParameter("@boucherNumber", model.boucherNumber));
+                        cmd.Parameters.Add(new SqlParameter("@createdAt", DateTime.Now));
                         await con.OpenAsync();
                         await cmd.ExecuteNonQueryAsync();
                         return true;

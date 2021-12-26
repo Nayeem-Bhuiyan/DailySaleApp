@@ -45,7 +45,7 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Index([FromBody] SaleRecordViewModel model)
+        public async Task<JsonResult> Index([FromBody] SaleRecordViewModel model)
         {
                 bool response = false;
                 SaleRecord SaleRecordObj = new SaleRecord
@@ -75,7 +75,7 @@ namespace NayeemSaleApp.Areas.Sale.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> SavePayment([FromBody] SaleRecordViewModel model)
+        public async Task<JsonResult> SavePayment([FromBody] SaleRecordViewModel model)
         {
             bool response = false;
             
